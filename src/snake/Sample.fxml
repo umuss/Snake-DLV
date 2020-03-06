@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
-	
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="snake.SampleController">
-	<!-- TODO Add Nodes -->
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="snake.SampleController">
+   <center>
+      <Canvas fx:id="mainCanvas" height="480.0" width="640.0" BorderPane.alignment="CENTER" />
+   </center>
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Punteggio" />
+         </children>
+      </HBox>
+   </top>
 </BorderPane>

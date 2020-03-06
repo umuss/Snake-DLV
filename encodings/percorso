@@ -1,0 +1,16 @@
+% Guess
+inPath(X,Y)|outPath(X,Y) :- riga(X), colonna(Y).
+
+% fatti (che otteniamo da Java)
+testa(X,Y). 
+coda(X,Y). 
+riga(1..9).
+colonna(1..9).
+mela(X,Y).
+
+% move(vecchiaX, nuovaX)
+moveUp(X1,X2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, X2 = X1-1.
+moveDown(X1,X2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, X2 = X1+1.
+% move(vecchiaY, nuovaY)
+moveRight(Y1,Y2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, Y2 = Y1+1.
+moveLeft(Y1,Y2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, Y2 = Y1-1.
