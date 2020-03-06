@@ -1,16 +1,30 @@
-% Guess
-inPath(X,Y)|outPath(X,Y) :- riga(X), colonna(Y).
-
 % fatti (che otteniamo da Java)
-testa(X,Y). 
-coda(X,Y). 
-riga(1..9).
-colonna(1..9).
-mela(X,Y).
+testa(1,1). 
+coda(1,0). 
+riga(0..5).
+colonna(0..5).
+mela(4,4).
+casella(X,Y) :- riga(X), colonna(Y).
 
-% move(vecchiaX, nuovaX)
-moveUp(X1,X2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, X2 = X1-1.
-moveDown(X1,X2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, X2 = X1+1.
-% move(vecchiaY, nuovaY)
-moveRight(Y1,Y2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, Y2 = Y1+1.
-moveLeft(Y1,Y2) :- testa(X1,Y1), casella(X2,Y2), X1 != X2, Y1 != Y2, Y2 = Y1-1.
+% caselle raggiungibili direttamente 
+% (muovo riga -> muovo X, muovo colonna -> muovo Y)
+%right
+raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), Y = Y1+1.
+%left
+raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), Y = Y1-1.
+%up
+raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), X = X1-1.
+%down
+raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), X = X1+1.
+
+raggiunge(X,Y) :- raggiunge(X,Y1), casella(X,Y), not melaRaggiunta, Y=Y1+1.
+raggiunge(X,Y) :- raggiunge(X,Y1), casella(X,Y), not melaRaggiunta, Y=Y1-1.
+raggiunge(X,Y) :- raggiunge(X1,Y), casella(X,Y), not melaRaggiunta, X=X1+1.
+raggiunge(X,Y) :- raggiunge(X1,Y), casella(X,Y), not melaRaggiunta, X=X1-1.
+melaRaggiunta :- raggiunge(X,Y), mela(X,Y).
+
+inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
+%:- mela(X,Y), not inFinalPath(X,Y).
+
+%:~ inFinalPath(X,Y). [1@1, X, Y]
+
