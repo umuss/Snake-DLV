@@ -16,7 +16,7 @@ public class Testa extends Casella {
 	public Testa(int row,int column) {
 		riga=row;
 		col=column;
-		image=new Image("assets/snakeRight.png");
+		image=new Image("file:assets/snakeRight.png");
 		this.direction=Direction.RIGHT;
 	}
 
