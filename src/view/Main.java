@@ -2,6 +2,7 @@ package view;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.GestoreScene;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -25,10 +26,11 @@ public class Main extends Application {
 	                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,backgroundSize);
 	    	root.setBackground(new Background(myBI));
 			SampleController sampleController = loader.getController();
-			sampleController.drawHead();
 			Scene scene = new Scene(root,400,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			GestoreScene.setScenaCorrente(scene);
 			primaryStage.setScene(scene);
+			sampleController.drawSnake(); 
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

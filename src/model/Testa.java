@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 import javafx.scene.image.Image;
@@ -10,13 +12,19 @@ public class Testa extends Casella {
 	private int riga;
 	@Param(1)
 	private int col;
-	private Image image;
+	private ArrayList<Image> images;
+	private Image imageCorrente;
 	private Direction direction;
 	
 	public Testa(int row,int column) {
 		riga=row;
 		col=column;
-		image=new Image("file:assets/snakeRight.png");
+		images=new ArrayList<Image>();
+		images.add(new Image("file:assets/snakeRight.png"));
+		images.add(new Image("file:assets/snake.png"));
+		images.add(new Image("file:assets/snakeLeft.png"));
+		images.add(new Image("file:assets/snakeDown.png"));
+		imageCorrente=images.get(0);
 		this.direction=Direction.RIGHT;
 	}
 
@@ -36,12 +44,28 @@ public class Testa extends Casella {
 		this.col = col;
 	}
 
-	public Image getImage() {
-		return image;
+	public Image getImageCorrente() {
+		return imageCorrente;
 	}
-
-	public void setImage(Image image) {
-		this.image = image;
+//
+//	public void setImage(Image image) {
+//		this.image = image;
+//	}
+	public void setDirection(Direction dir) {
+		direction=dir;
+		if(dir==Direction.DOWN)
+			imageCorrente=images.get(3);
+		else if(dir==Direction.UP)
+			imageCorrente=images.get(1);
+		else if(dir==Direction.LEFT)
+			imageCorrente=images.get(2);
+		else
+			imageCorrente=images.get(0);
+			
+		
+	}
+	public Direction getDirection() {
+		return direction;
 	}
 	
 }
