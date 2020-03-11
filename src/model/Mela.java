@@ -11,12 +11,12 @@ public class Mela extends Casella {
 	@Param(1)
 	private int col;
 	private Image image;
-	
-	public Mela(int row,int column) {
-		super(row,column);
-		riga=row;
-		col=column;
-		image=new Image("assets/mela.png");
+
+	public Mela(int row, int column) {
+		super(row, column);
+		riga = row;
+		col = column;
+		image = new Image("file:assets/mela.png");
 	}
 
 	public int getRiga() {
@@ -42,5 +42,5 @@ public class Mela extends Casella {
 	public void setImage(Image image) {
 		this.image = image;
 	}
-	
+
 }

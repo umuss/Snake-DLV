@@ -1,9 +1,9 @@
 % fatti (che otteniamo da Java)
-testa(0,5). 
+testa(0,37). 
 coda(1,0). 
-riga(0..5).
-colonna(0..5).
-mela(0,0).
+riga(0..39).
+colonna(0..39).
+mela(39,39).
 casella(X,Y) :- riga(X), colonna(Y).
 rigaMax(5).
 colMax(5).

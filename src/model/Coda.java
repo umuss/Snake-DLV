@@ -12,13 +12,13 @@ public class Coda extends Casella {
 	private int col;
 	private Image image;
 	private Direction direction;
-	
-	public Coda(int row,int column) {
-		super(row,column);
-		riga=row;
-		col=column;
-		image=new Image("file:assets/tailRight.png");
-		this.direction=Direction.RIGHT;
+
+	public Coda(int row, int column) {
+		super(row, column);
+		riga = row;
+		col = column;
+		image = new Image("file:assets/tailRight.png");
+		this.direction = Direction.RIGHT;
 	}
 
 	public int getRiga() {
@@ -44,5 +44,5 @@ public class Coda extends Casella {
 	public void setImage(Image image) {
 		this.image = image;
 	}
-	
+
 }

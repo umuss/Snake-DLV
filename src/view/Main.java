@@ -1,8 +1,9 @@
 package view;
 	
+import java.util.Random;
+
 import javafx.application.Application;
-import javafx.stage.Stage;
-import model.GestoreScene;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -11,7 +12,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import model.GestoreScene;
+import model.Mela;
 
 
 public class Main extends Application {
@@ -30,7 +33,11 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			GestoreScene.setScenaCorrente(scene);
 			primaryStage.setScene(scene);
-			sampleController.drawSnake(); 
+			
+			// Andrebbe presa da DLV tipo
+			Mela mela = new Mela(new Random().nextInt(40), new Random().nextInt(40));
+			//sampleController.drawMela(mela);
+			sampleController.drawSnake(mela); 
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
