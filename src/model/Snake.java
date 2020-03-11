@@ -11,11 +11,7 @@ public class Snake {
 		code = new ArrayList<Coda>();
 		code.add(new Coda(1,26));
 		code.add(new Coda(1,25));
-		code.add(new Coda(1,24));
-		code.add(new Coda(1,23));
-		code.add(new Coda(1,22));
-		code.add(new Coda(1,21));
-		code.add(new Coda(1,20));
+	
 	}
 	public Testa getTesta() {
 		return testa;

@@ -35,9 +35,8 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 
 			// Andrebbe presa da DLV tipo
-			Mela mela = new Mela(new Random().nextInt(40), new Random().nextInt(40));
 			// sampleController.drawMela(mela);
-			sampleController.drawSnake(mela);
+			sampleController.drawSnake();
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
