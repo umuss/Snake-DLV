@@ -47,32 +47,32 @@ public class SampleController {
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
 								mainCanvas.getHeight());
 						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),
-								snake.getTesta().getPosX(), snake.getTesta().getPosY());
+								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					if (snake.getTesta().getDirection() == Direction.LEFT) {
 						verificaProssimaCella(Direction.LEFT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
 								mainCanvas.getHeight());
 						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),
-								snake.getTesta().getPosX(), snake.getTesta().getPosY());
+								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					if (snake.getTesta().getDirection() == Direction.DOWN) {
 						verificaProssimaCella(Direction.DOWN);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
 								mainCanvas.getHeight());
 						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),
-								snake.getTesta().getPosX(), snake.getTesta().getPosY());
+								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					if (snake.getTesta().getDirection() == Direction.UP) {
 						verificaProssimaCella(Direction.UP);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
 								mainCanvas.getHeight());
 						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),
-								snake.getTesta().getPosX(), snake.getTesta().getPosY());
+								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					frame = 0;
 					mainCanvas.getGraphicsContext2D().drawImage(mela.getImage(), mela.getPosX(), mela.getPosY());
-					mainCanvas.getGraphicsContext2D().drawImage(snake.getCode().get(0).getImage(), snake.getCode().get(0).getPosX(), snake.getCode().get(0).getPosY());
+					mainCanvas.getGraphicsContext2D().drawImage(snake.getCode().get(0).getImage(), snake.getCode().get(0).getPosX(), snake.getCode().get(0).getPosY(), 25, 25);
 						
 				}
 				frame += 1;

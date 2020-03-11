@@ -21,6 +21,9 @@ public class Testa extends Casella {
 		riga = row;
 		col = column;
 		images = new ArrayList<Image>();
+		
+		// da sostituire con le bitmap ruotate
+		
 		images.add(new Image("file:assets/snakeTransparent.png"));
 		images.add(new Image("file:assets/snakeTransparent.png"));
 		images.add(new Image("file:assets/snakeTransparent.png"));

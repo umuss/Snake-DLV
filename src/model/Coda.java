@@ -17,7 +17,7 @@ public class Coda extends Casella {
 		super(row, column);
 		riga = row;
 		col = column;
-		image = new Image("file:assets/tailLeft.png");
+		image = new Image("file:assets/tail.png");
 		this.direction = Direction.RIGHT;
 	}
 

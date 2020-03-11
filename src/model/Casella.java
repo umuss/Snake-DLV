@@ -17,9 +17,10 @@ public class Casella {
 	public Casella(int r, int c) {
 		this.row = r;
 		this.column = c;
-		this.passo = 15;
-		// passo 15: matrice 40x40 con risoluzione 600x600 (600/15 = 40)
+		this.passo = 20;
+		// passo 15: matrice 40x40 con risoluzione 600x600 (600/15 = 40) (troppo piccolo!!)
 		// passo 25: matrice 32x32, siccome abbiamo risoluzione di 800x800 ed 800/25 = 32.
+		// passo 25 (con risoluzione 600x600): matrice 24x24.
 		this.posX = c * passo;
 		this.posY = r * passo;
 	}
