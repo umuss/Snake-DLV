@@ -6,11 +6,16 @@ public class Snake {
 	private Testa testa;
 	private ArrayList<Coda> code;
 	public Snake() {
-		testa = new Testa(4,4);
+		//matrice 32x32
+		testa = new Testa(1,27);
 		code = new ArrayList<Coda>();
-		code.add(new Coda(4,3));
-		code.add(new Coda(4,2));
-		code.add(new Coda(4,1));
+		code.add(new Coda(1,26));
+		code.add(new Coda(1,25));
+		code.add(new Coda(1,24));
+		code.add(new Coda(1,23));
+		code.add(new Coda(1,22));
+		code.add(new Coda(1,21));
+		code.add(new Coda(1,20));
 	}
 	public Testa getTesta() {
 		return testa;

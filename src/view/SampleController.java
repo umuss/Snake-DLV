@@ -1,11 +1,14 @@
 package view;
 
+import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Pair;
 import model.Coda;
 import model.Direction;
 import model.GestoreScene;
@@ -103,6 +106,8 @@ public class SampleController {
 
 	public void verificaProssimaCella(Direction dir) {
 		int cont=1;
+		ArrayList<Pair<Float,Float>> posizioniVecchie=new ArrayList<>();
+		int cont2=0;
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getPosX() >= mainCanvas.getWidth() - 30) {
 				snake.getTesta().setPosX(-50);
@@ -125,17 +130,22 @@ public class SampleController {
 					cont++;
 				}
 			} else {
+				posizioniVecchie.add(new Pair<Float,Float>(snake.getTesta().getPosX(),snake.getTesta().getPosY()));
 				for (Coda c : snake.getCode()) {
-					c.setPosY(c.getPosY() - snake.getTesta().getPasso());
+					posizioniVecchie.add(new Pair<Float,Float>(c.getPosX(),c.getPosY()));
 				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() - snake.getTesta().getPasso());
+				for(int i=0;i<snake.getCode().size();i++) {
+					snake.getCode().get(i).setPosX(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setPosY(posizioniVecchie.get(i).getValue());
+				}
 			}
 		}
 		if (dir == Direction.LEFT) {
 			if (snake.getTesta().getPosX() <= -60) {
-				snake.getTesta().setPosX((int) mainCanvas.getWidth() - 50);
+				snake.getTesta().setPosX((int) mainCanvas.getHeight() - 50);
 				for (Coda c : snake.getCode()) {
-					c.setPosX(((int)mainCanvas.getHeight()-50)-(snake.getTesta().getPasso()*cont));
+					c.setPosX(c.getPosX() + snake.getTesta().getPasso());
 				}
 			} else {
 				snake.getTesta().setPosX(snake.getTesta().getPosX() - snake.getTesta().getPasso());
