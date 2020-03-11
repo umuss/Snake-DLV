@@ -39,7 +39,7 @@ public class SampleController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 4) {
+				if (frame >= 10) {
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),

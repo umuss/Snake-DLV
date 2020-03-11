@@ -24,7 +24,7 @@ public class Testa extends Casella {
 		images.add(new Image("file:assets/snake.png"));
 		images.add(new Image("file:assets/snakeLeft.png"));
 		images.add(new Image("file:assets/snakeDown.png"));
-		imageCorrente=images.get(0);
+		imageCorrente=new Image("file:assets/tailLeft.png");
 		this.direction=Direction.RIGHT;
 	}
 

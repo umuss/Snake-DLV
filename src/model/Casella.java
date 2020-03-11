@@ -17,7 +17,7 @@ public class Casella {
 	public Casella(int r, int c) {
 		this.row = r;
 		this.column = c;
-		this.passo = 20;
+		this.passo = 30;
 		this.posX = c * passo;
 		this.posY = r * passo;
 	}
