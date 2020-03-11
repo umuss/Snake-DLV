@@ -9,6 +9,8 @@ public class Snake {
 		testa = new Testa(4,4);
 		code = new ArrayList<Coda>();
 		code.add(new Coda(4,3));
+		code.add(new Coda(4,2));
+		code.add(new Coda(4,1));
 	}
 	public Testa getTesta() {
 		return testa;

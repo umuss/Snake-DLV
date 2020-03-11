@@ -72,8 +72,9 @@ public class SampleController {
 					}
 					frame = 0;
 					mainCanvas.getGraphicsContext2D().drawImage(mela.getImage(), mela.getPosX(), mela.getPosY());
-					mainCanvas.getGraphicsContext2D().drawImage(snake.getCode().get(0).getImage(), snake.getCode().get(0).getPosX(), snake.getCode().get(0).getPosY(), 25, 25);
-						
+					for (Coda c : snake.getCode()) {
+						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(),c.getPosX(), c.getPosY(), 25, 25);
+					}
 				}
 				frame += 1;
 			}
@@ -101,11 +102,13 @@ public class SampleController {
 	}
 
 	public void verificaProssimaCella(Direction dir) {
+		int cont=1;
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getPosX() >= mainCanvas.getWidth() - 30) {
 				snake.getTesta().setPosX(-50);
 				for (Coda c : snake.getCode()) {
-					c.setPosX(-50);
+					c.setPosX(-(50+snake.getTesta().getPasso()*cont));
+					cont++;
 				}
 			} else {
 				for (Coda c : snake.getCode()) {
@@ -117,13 +120,23 @@ public class SampleController {
 		if (dir == Direction.UP) {
 			if (snake.getTesta().getPosY() <= -60) {
 				snake.getTesta().setPosY((int) mainCanvas.getWidth() - 80);
+				for (Coda c : snake.getCode()) {
+					c.setPosY(c.getPosY()-(80+snake.getTesta().getPasso()*cont));
+					cont++;
+				}
 			} else {
+				for (Coda c : snake.getCode()) {
+					c.setPosY(c.getPosY() - snake.getTesta().getPasso());
+				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() - snake.getTesta().getPasso());
 			}
 		}
 		if (dir == Direction.LEFT) {
 			if (snake.getTesta().getPosX() <= -60) {
-				snake.getTesta().setPosX((int) mainCanvas.getHeight() - 50);
+				snake.getTesta().setPosX((int) mainCanvas.getWidth() - 50);
+				for (Coda c : snake.getCode()) {
+					c.setPosX(((int)mainCanvas.getHeight()-50)-(snake.getTesta().getPasso()*cont));
+				}
 			} else {
 				snake.getTesta().setPosX(snake.getTesta().getPosX() - snake.getTesta().getPasso());
 			}
