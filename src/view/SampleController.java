@@ -12,6 +12,8 @@ import model.GestoreScene;
 import model.Mela;
 import model.Snake;
 
+// Matrice: dimensione 32x32
+
 public class SampleController {
 
 	@FXML
