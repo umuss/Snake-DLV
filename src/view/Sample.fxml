@@ -20,6 +20,6 @@
       </ToolBar>
    </top>
    <left>
-      <Canvas fx:id="mainCanvas" height="480.0" width="640.0" BorderPane.alignment="CENTER" />
+      <Canvas fx:id="mainCanvas" height="800.0" width="800.0" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>

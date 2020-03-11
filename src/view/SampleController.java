@@ -23,26 +23,27 @@ public class SampleController {
 		AnimationTimer tm=new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if(frame>=2) {
+				if(frame>=4) {
 					if(snake.getTesta().getDirection()==Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0,0,mainCanvas.getWidth(),mainCanvas.getHeight());
-						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getCol(),snake.getTesta().getRiga());
+						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getPosX(),snake.getTesta().getPosY());
 					}
 					if(snake.getTesta().getDirection()==Direction.LEFT) {
 						verificaProssimaCella(Direction.LEFT);
 						mainCanvas.getGraphicsContext2D().clearRect(0,0,mainCanvas.getWidth(),mainCanvas.getHeight());
-						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getCol(),snake.getTesta().getRiga());
+						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getPosX(),snake.getTesta().getPosY());
 					}
 					if(snake.getTesta().getDirection()==Direction.DOWN) {
 						verificaProssimaCella(Direction.DOWN);
+						System.out.println("CIAO");
 						mainCanvas.getGraphicsContext2D().clearRect(0,0,mainCanvas.getWidth(),mainCanvas.getHeight());
-						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getCol(),snake.getTesta().getRiga());
+						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getPosX(),snake.getTesta().getPosY());
 					}
 					if(snake.getTesta().getDirection()==Direction.UP) {
 						verificaProssimaCella(Direction.UP);
 						mainCanvas.getGraphicsContext2D().clearRect(0,0,mainCanvas.getWidth(),mainCanvas.getHeight());
-						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getCol(),snake.getTesta().getRiga());
+						mainCanvas.getGraphicsContext2D().drawImage(snake.getTesta().getImageCorrente(),snake.getTesta().getPosX(),snake.getTesta().getPosY());
 					}
 					frame=0;
 				}
@@ -75,35 +76,35 @@ public class SampleController {
 	}
 	public void verificaProssimaCella(Direction dir) {
 		if(dir==Direction.RIGHT){
-			if(snake.getTesta().getCol()>=mainCanvas.getHeight()-70) {
-				snake.getTesta().setCol(-50);
+			if(snake.getTesta().getPosX()>=mainCanvas.getWidth()-30) {
+				snake.getTesta().setPosX(-50);
 			}
 			else {
-				snake.getTesta().setCol(snake.getTesta().getCol()+1);
+				snake.getTesta().setPosX(snake.getTesta().getPosX()+snake.getTesta().getPasso());
 			}
 		}
 		if(dir==Direction.UP){
-			if(snake.getTesta().getRiga()<=-60) {
-				snake.getTesta().setRiga((int)mainCanvas.getWidth()-260);
+			if(snake.getTesta().getPosY()<=-60) {
+				snake.getTesta().setPosY((int)mainCanvas.getWidth()-80);
 			}
 			else {
-				snake.getTesta().setRiga(snake.getTesta().getRiga()-1);
+				snake.getTesta().setPosY(snake.getTesta().getPosY()-snake.getTesta().getPasso());
 			}
 		}
 		if(dir==Direction.LEFT){
-			if(snake.getTesta().getCol()<=-60) {
-				snake.getTesta().setCol((int)mainCanvas.getHeight()-100);
+			if(snake.getTesta().getPosX()<=-60) {
+				snake.getTesta().setPosX((int)mainCanvas.getHeight()-50);
 			}
 			else {
-				snake.getTesta().setCol(snake.getTesta().getCol()-1);
+				snake.getTesta().setPosX(snake.getTesta().getPosX()-snake.getTesta().getPasso());
 			}
 		}
 		if(dir==Direction.DOWN){
-			if(snake.getTesta().getRiga()>=mainCanvas.getWidth()-260) {
-				snake.getTesta().setRiga(-80);
+			if(snake.getTesta().getPosY()>=mainCanvas.getWidth()-80) {
+				snake.getTesta().setPosY(-80);
 			}
 			else {
-				snake.getTesta().setRiga(snake.getTesta().getRiga()+1);
+				snake.getTesta().setPosY(snake.getTesta().getPosY()+snake.getTesta().getPasso());
 			}
 		}
 		

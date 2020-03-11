@@ -15,8 +15,8 @@ public class Testa extends Casella {
 	private ArrayList<Image> images;
 	private Image imageCorrente;
 	private Direction direction;
-	
 	public Testa(int row,int column) {
+		super(row,column);
 		riga=row;
 		col=column;
 		images=new ArrayList<Image>();

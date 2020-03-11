@@ -13,6 +13,7 @@ public class Mela extends Casella {
 	private Image image;
 	
 	public Mela(int row,int column) {
+		super(row,column);
 		riga=row;
 		col=column;
 		image=new Image("assets/mela.png");

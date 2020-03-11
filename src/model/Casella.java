@@ -10,15 +10,48 @@ public class Casella {
 	private int row;
 	@Param(1)
 	private int column;
-
+	private float posX;
+	private float posY;
+	private int passo;
 	
-	public Casella(int r,int c,int v){
+	public Casella(int r,int c){
 		this.row=r;
 		this.column=c;
+		this.passo=40;
+		this.posX=c*passo;
+		this.posY=r*passo;
 	}
 	
-	public Casella() {
+
+	public int getPasso() {
+		return passo;
 	}
+
+
+	public void setPasso(int passo) {
+		this.passo = passo;
+	}
+
+
+	public float getPosX() {
+		return posX;
+	}
+
+
+	public void setPosX(float posX) {
+		this.posX = posX;
+	}
+
+
+	public float getPosY() {
+		return posY;
+	}
+
+
+	public void setPosY(float posY) {
+		this.posY = posY;
+	}
+
 
 	public int getRow() {
 		return row;

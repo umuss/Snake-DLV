@@ -14,6 +14,7 @@ public class Coda extends Casella {
 	private Direction direction;
 	
 	public Coda(int row,int column) {
+		super(row,column);
 		riga=row;
 		col=column;
 		image=new Image("file:assets/tailRight.png");
