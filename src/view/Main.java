@@ -1,7 +1,5 @@
 package view;
 
-import java.util.Random;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +12,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.GestoreScene;
-import model.Mela;
 
 public class Main extends Application {
 	@Override
@@ -29,10 +26,11 @@ public class Main extends Application {
 					BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 			root.setBackground(new Background(myBI));
 			SampleController sampleController = loader.getController();
-			Scene scene = new Scene(root, 800, 800);
+			Scene scene = new Scene(root, 800, 840);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			GestoreScene.setScenaCorrente(scene);
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 
 			// Andrebbe presa da DLV tipo
 			// sampleController.drawMela(mela);

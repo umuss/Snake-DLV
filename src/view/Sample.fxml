@@ -9,7 +9,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SampleController">
    <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ToolBar maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
             <Label text="Punteggio">
                <font>
@@ -19,7 +19,7 @@
          </items>
       </ToolBar>
    </top>
-   <left>
+   <center>
       <Canvas fx:id="mainCanvas" height="800.0" width="800.0" BorderPane.alignment="CENTER" />
-   </left>
+   </center>
 </BorderPane>
