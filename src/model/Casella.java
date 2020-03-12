@@ -58,25 +58,45 @@ public class Casella {
 	public void setRow(int row) {
 		if (this.row - row > 0) {
 			this.posY -= passo;
-			System.out.println("+=");
 		} else {
-			this.posY =row*passo;
+			this.posY = row * passo;
 		}
 		this.row = row;
-				
+
 	}
 
 	public int getCol() {
 		return col;
 	}
 
-	public void setCol(int col) {
-		if (this.col - col > 0) {
-			this.posX -= passo;
-			System.out.println("+=");
+	public void incrementaCol() {
+		if (col == 32) {
+			setCol(0);
 		} else {
-			this.posX =col*passo;
+			col++;
 		}
+	}
+	
+	public void decrementaRow() {
+		if (row == 0) {
+			setRow(31);
+		}
+		else {
+			row--;
+		}
+	}
+	
+	public void decrementaCol() {
+		if (col == 0) {
+			setCol(31);
+		}
+		else {
+			col--;
+		}
+	}
+
+	public void setCol(int col) {
+		this.posX = col * passo;
 		this.col = col;
 
 	}

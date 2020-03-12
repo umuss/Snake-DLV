@@ -104,15 +104,14 @@ public class SampleController {
 	}
 
 	public void verificaProssimaCella(Direction dir) {
-		int cont = 1;
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 
 		if (dir == Direction.RIGHT) {
-			if (snake.getTesta().getPosX() >= mainCanvas.getWidth() - 30) {
-				snake.getTesta().setPosX(-50);
+			if (snake.getTesta().getCol() >= 32) {
+				snake.getTesta().setCol(0);
 				for (Coda c : snake.getCode()) {
-					c.setPosX(-(50 + snake.getTesta().getPasso() * cont));
-					cont++;
+					c.incrementaCol();
+					
 				}
 				System.out.println("STO SFORANDO");
 				// Caso non di sforamento
@@ -129,11 +128,10 @@ public class SampleController {
 			}
 		}
 		if (dir == Direction.UP) {
-			if (snake.getTesta().getPosY() <= -60) {
-				snake.getTesta().setPosY((int) mainCanvas.getWidth() - 80);
+			if (snake.getTesta().getRow() <= 0) {
+				snake.getTesta().setRow(31);
 				for (Coda c : snake.getCode()) {
-					c.setPosY(c.getPosY() - (80 + snake.getTesta().getPasso() * cont));
-					cont++;
+					c.decrementaRow();
 				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -148,10 +146,10 @@ public class SampleController {
 			}
 		}
 		if (dir == Direction.LEFT) {
-			if (snake.getTesta().getPosX() <= -60) {
-				snake.getTesta().setPosX((int) mainCanvas.getHeight() - 50);
+			if (snake.getTesta().getCol() <= 0) {
+				snake.getTesta().setCol(31);
 				for (Coda c : snake.getCode()) {
-					c.setPosX(c.getPosX() + snake.getTesta().getPasso());
+					c.decrementaCol();
 				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -166,8 +164,11 @@ public class SampleController {
 			}
 		}
 		if (dir == Direction.DOWN) {
-			if (snake.getTesta().getPosY() >= mainCanvas.getWidth() - 80) {
-				snake.getTesta().setPosY(-80);
+			if (snake.getTesta().getRow() >= 32) {
+				snake.getTesta().setRow(0);
+				for (Coda c : snake.getCode()) {
+					c.decrementaRow();
+				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
