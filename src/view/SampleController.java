@@ -26,11 +26,14 @@ public class SampleController {
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
 	Mela mela = new Mela(new Random().nextInt(32), new Random().nextInt(32));
+	boolean hoDisegnato = false;
+
 	public void drawSnake() {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				if (frame >= 10) {
+					hoDisegnato = true;
 					verificaCollisioneMela();
 					verificaAutoCollisione();
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
@@ -74,20 +77,25 @@ public class SampleController {
 		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.DOWN && snake.getTesta().getDirection()!=Direction.UP) {
-					//System.out.println("DOWN");
-					snake.getTesta().setDirection(Direction.DOWN);
-				} else if (event.getCode() == KeyCode.RIGHT && snake.getTesta().getDirection()!=Direction.LEFT) {
-					snake.getTesta().setDirection(Direction.RIGHT);
-					//System.out.println("right");
-				} else if (event.getCode() == KeyCode.LEFT && snake.getTesta().getDirection()!=Direction.RIGHT) {
-					snake.getTesta().setDirection(Direction.LEFT);
-					//System.out.println("left");
-				} else if (event.getCode() == KeyCode.UP && snake.getTesta().getDirection()!=Direction.DOWN) {
-					snake.getTesta().setDirection(Direction.UP);
-					//System.out.println("up");
-				}
 
+				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP) {
+					// System.out.println("DOWN");
+					snake.getTesta().setDirection(Direction.DOWN);
+					hoDisegnato = false;
+				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato && snake.getTesta().getDirection() != Direction.LEFT) {
+					snake.getTesta().setDirection(Direction.RIGHT);
+					// System.out.println("right");
+					hoDisegnato = false;
+				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato && snake.getTesta().getDirection() != Direction.RIGHT) {
+					snake.getTesta().setDirection(Direction.LEFT);
+					// System.out.println("left");
+					hoDisegnato = false;
+				} else if (event.getCode() == KeyCode.UP && hoDisegnato && snake.getTesta().getDirection() != Direction.DOWN) {
+					snake.getTesta().setDirection(Direction.UP);
+					// System.out.println("up");
+					hoDisegnato = false;
+				}
+					
 			}
 		});
 	}
@@ -95,6 +103,9 @@ public class SampleController {
 	public void verificaProssimaCella(Direction dir) {
 		int cont = 1;
 		ArrayList<Pair<Float, Float>> posizioniVecchie = new ArrayList<>();
+		
+		
+		
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getPosX() >= mainCanvas.getWidth() - 30) {
 				snake.getTesta().setPosX(-50);
@@ -168,18 +179,24 @@ public class SampleController {
 		}
 
 	}
+
 	public void verificaCollisioneMela() {
-		if( (snake.getTesta().getPosX()>=mela.getPosX()-30 && snake.getTesta().getPosX()<=mela.getPosX()+15) && (snake.getTesta().getPosY()>=mela.getPosY()-30 && snake.getTesta().getPosY()<=mela.getPosY()+15) ) {
-			mela.setPosX(new Random().nextInt(31)*snake.getTesta().getPasso());
-			mela.setPosY(new Random().nextInt(31)*snake.getTesta().getPasso());
-			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size()-1).getRiga()-1,snake.getCode().get(snake.getCode().size()-1).getCol()-1));
+		if ((snake.getTesta().getPosX() >= mela.getPosX() - 30 && snake.getTesta().getPosX() <= mela.getPosX() + 15)
+				&& (snake.getTesta().getPosY() >= mela.getPosY() - 30
+						&& snake.getTesta().getPosY() <= mela.getPosY() + 15)) {
+			mela.setPosX(new Random().nextInt(31) * snake.getTesta().getPasso());
+			mela.setPosY(new Random().nextInt(31) * snake.getTesta().getPasso());
+			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRiga() - 1,
+					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
 	}
+
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
 			for (Coda c1 : snake.getCode()) {
-				if(c!=c1) {
-					if( (c.getPosX()>=c1.getPosX()-16 && c.getPosX()<=c1.getPosX()+15) && (c.getPosY()>=c1.getPosY()-16 && c.getPosY()<=c1.getPosY()+15) ) {
+				if (c != c1) {
+					if ((c.getPosX() >= c1.getPosX() - 16 && c.getPosX() <= c1.getPosX() + 15)
+							&& (c.getPosY() >= c1.getPosY() - 16 && c.getPosY() <= c1.getPosY() + 15)) {
 						System.out.println("CIAO");
 					}
 				}
