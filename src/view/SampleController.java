@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Pair;
@@ -27,6 +28,9 @@ public class SampleController {
 	Snake snake = new Snake();
 	Mela mela = new Mela(new Random().nextInt(32), new Random().nextInt(32));
 	boolean hoDisegnato = false;
+
+	@FXML
+	private Label labelPunteggio;
 
 	public void drawSnake() {
 		AnimationTimer tm = new AnimationTimer() {
@@ -213,6 +217,8 @@ public class SampleController {
 	public void verificaCollisioneMela() {
 		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol())) {
 			System.out.println("prendo mela");
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
 			mela.setCol(new Random().nextInt(32));
 			mela.setRow(new Random().nextInt(32));
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,

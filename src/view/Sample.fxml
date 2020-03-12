@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -11,10 +12,15 @@
    <top>
       <ToolBar maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
-            <Label text="Punteggio">
+            <Label text="Punteggio: ">
                <font>
                   <Font size="22.0" />
                </font>
+            </Label>
+            <Label fx:id="labelPunteggio" style="-fx-text-fill: green;" text="0">
+               <padding>
+                  <Insets top="3.0" />
+               </padding>
             </Label>
          </items>
       </ToolBar>
