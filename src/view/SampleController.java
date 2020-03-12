@@ -78,22 +78,22 @@ public class SampleController {
 			@Override
 			public void handle(KeyEvent event) {
 
-				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP) {
+				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP && compreso()) {
 					// System.out.println("DOWN");
 					snake.getTesta().setDirection(Direction.DOWN);
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.LEFT) {
+						&& snake.getTesta().getDirection() != Direction.LEFT && compreso()) {
 					snake.getTesta().setDirection(Direction.RIGHT);
 					// System.out.println("right");
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.RIGHT) {
+						&& snake.getTesta().getDirection() != Direction.RIGHT && compreso()) {
 					snake.getTesta().setDirection(Direction.LEFT);
 					// System.out.println("left");
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.UP && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.DOWN) {
+						&& snake.getTesta().getDirection() != Direction.DOWN && compreso()) {
 					snake.getTesta().setDirection(Direction.UP);
 					// System.out.println("up");
 					hoDisegnato = false;
@@ -102,18 +102,25 @@ public class SampleController {
 			}
 		});
 	}
-
+	public boolean compreso() {
+		if( (snake.getTesta().getCol()>0 && snake.getTesta().getCol()<31) && (snake.getTesta().getRow()>0 && snake.getTesta().getRow()<31))
+			return true;
+		return false;
+	}
 	public void verificaProssimaCella(Direction dir) {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
-
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getCol() >= 32) {
-				snake.getTesta().setCol(0);
+				posizioniVecchie.add(new Pair<Integer,Integer>(snake.getTesta().getCol(),snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					c.incrementaCol();
-					
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
-				System.out.println("STO SFORANDO");
+				snake.getTesta().setCol(0);
+				for (int i = 0; i < snake.getCode().size(); i++) {
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+				}
+				//System.out.println("STO SFORANDO");
 				// Caso non di sforamento
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -129,9 +136,14 @@ public class SampleController {
 		}
 		if (dir == Direction.UP) {
 			if (snake.getTesta().getRow() <= 0) {
-				snake.getTesta().setRow(31);
+				posizioniVecchie.add(new Pair<Integer,Integer>(snake.getTesta().getCol(),snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					c.decrementaRow();
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+				}
+				snake.getTesta().setRow(31);
+				for (int i = 0; i < snake.getCode().size(); i++) {
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -147,9 +159,14 @@ public class SampleController {
 		}
 		if (dir == Direction.LEFT) {
 			if (snake.getTesta().getCol() <= 0) {
-				snake.getTesta().setCol(31);
+				posizioniVecchie.add(new Pair<Integer,Integer>(snake.getTesta().getCol(),snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					c.decrementaCol();
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+				}
+				snake.getTesta().setCol(31);
+				for (int i = 0; i < snake.getCode().size(); i++) {
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -165,9 +182,14 @@ public class SampleController {
 		}
 		if (dir == Direction.DOWN) {
 			if (snake.getTesta().getRow() >= 32) {
-				snake.getTesta().setRow(0);
+				posizioniVecchie.add(new Pair<Integer,Integer>(snake.getTesta().getCol(),snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					c.decrementaRow();
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+				}
+				snake.getTesta().setRow(0);
+				for (int i = 0; i < snake.getCode().size(); i++) {
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -185,11 +207,9 @@ public class SampleController {
 	}
 
 	public void verificaCollisioneMela() {
-		if ((snake.getTesta().getPosX() >= mela.getPosX() - 30 && snake.getTesta().getPosX() <= mela.getPosX() + 15)
-				&& (snake.getTesta().getPosY() >= mela.getPosY() - 30
-						&& snake.getTesta().getPosY() <= mela.getPosY() + 15)) {
-			mela.setPosX(new Random().nextInt(31) * snake.getTesta().getPasso());
-			mela.setPosY(new Random().nextInt(31) * snake.getTesta().getPasso());
+		if ((snake.getTesta().getRow()==mela.getRow() && snake.getTesta().getCol()==mela.getCol())) {
+			mela.setCol(new Random().nextInt(32));
+			mela.setRow(new Random().nextInt(32));
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
@@ -199,9 +219,8 @@ public class SampleController {
 		for (Coda c : snake.getCode()) {
 			for (Coda c1 : snake.getCode()) {
 				if (c != c1) {
-					if ((c.getPosX() >= c1.getPosX() - 16 && c.getPosX() <= c1.getPosX() + 15)
-							&& (c.getPosY() >= c1.getPosY() - 16 && c.getPosY() <= c1.getPosY() + 15)) {
-						System.out.println("CIAO");
+					if (c.getRow()==c1.getRow() && c.getCol()==c1.getCol()) {
+						System.out.println("AUTOCOLLISIONE");
 					}
 				}
 			}

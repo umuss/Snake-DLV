@@ -70,7 +70,7 @@ public class Casella {
 	}
 
 	public void incrementaCol() {
-		if (col == 32) {
+		if (col == 31) {
 			setCol(0);
 		} else {
 			col++;

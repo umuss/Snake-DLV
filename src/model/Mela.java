@@ -19,21 +19,6 @@ public class Mela extends Casella {
 		image = new Image("file:assets/mela.png");
 	}
 
-	public int getRiga() {
-		return riga;
-	}
-
-	public void setRiga(int riga) {
-		this.riga = riga;
-	}
-
-	public int getCol() {
-		return col;
-	}
-
-	public void setCol(int col) {
-		this.col = col;
-	}
 
 	public Image getImage() {
 		return image;
