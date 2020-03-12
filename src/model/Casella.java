@@ -60,7 +60,7 @@ public class Casella {
 			this.posY -= passo;
 			System.out.println("+=");
 		} else {
-			this.posY += passo;
+			this.posY =row*passo;
 		}
 		this.row = row;
 				
@@ -75,7 +75,7 @@ public class Casella {
 			this.posX -= passo;
 			System.out.println("+=");
 		} else {
-			this.posX += passo;
+			this.posX =col*passo;
 		}
 		this.col = col;
 

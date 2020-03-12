@@ -7,10 +7,10 @@ public class Snake {
 	private ArrayList<Coda> code;
 	public Snake() {
 		//matrice 32x32
-		testa = new Testa(1,27);
+		testa = new Testa(1,3);
 		code = new ArrayList<Coda>();
-		code.add(new Coda(1,26));
-		code.add(new Coda(1,25));
+		code.add(new Coda(1,2));
+		code.add(new Coda(1,1));
 	
 	}
 	public Testa getTesta() {

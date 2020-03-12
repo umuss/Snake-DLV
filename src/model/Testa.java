@@ -32,21 +32,9 @@ public class Testa extends Casella {
 		this.direction = Direction.RIGHT;
 	}
 
-	public int getRiga() {
-		return riga;
-	}
+	
 
-	public void setRiga(int riga) {
-		this.riga = riga;
-	}
-
-	public int getCol() {
-		return col;
-	}
-
-	public void setCol(int col) {
-		this.col = col;
-	}
+	
 
 	public Image getImageCorrente() {
 		return imageCorrente;

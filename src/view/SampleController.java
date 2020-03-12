@@ -32,7 +32,7 @@ public class SampleController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 80) {
+				if (frame >= 10) {
 					hoDisegnato = true;
 					verificaCollisioneMela();
 					//verificaAutoCollisione();
@@ -114,6 +114,7 @@ public class SampleController {
 					c.setPosX(-(50 + snake.getTesta().getPasso() * cont));
 					cont++;
 				}
+				System.out.println("STO SFORANDO");
 				// Caso non di sforamento
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -139,7 +140,7 @@ public class SampleController {
 				for (Coda c : snake.getCode()) {
 					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
-				snake.getTesta().setPosY(snake.getTesta().getPosY() - snake.getTesta().getPasso());
+				snake.getTesta().setRow(snake.getTesta().getRow() - 1);
 				for (int i = 0; i < snake.getCode().size(); i++) {
 					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
 					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
@@ -157,7 +158,7 @@ public class SampleController {
 				for (Coda c : snake.getCode()) {
 					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
-				snake.getTesta().setPosX(snake.getTesta().getPosX() - snake.getTesta().getPasso());
+				snake.getTesta().setCol(snake.getTesta().getCol() - 1);
 				for (int i = 0; i < snake.getCode().size(); i++) {
 					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
 					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
@@ -172,7 +173,7 @@ public class SampleController {
 				for (Coda c : snake.getCode()) {
 					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
-				snake.getTesta().setPosY(snake.getTesta().getPosY() + snake.getTesta().getPasso());
+				snake.getTesta().setRow(snake.getTesta().getRow()+1);
 				for (int i = 0; i < snake.getCode().size(); i++) {
 					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
 					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
