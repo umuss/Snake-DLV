@@ -1,10 +1,10 @@
 % fatti (che otteniamo da Java)
 testa(0,37). 
 coda(1,0). 
-riga(0..39).
-colonna(0..39).
+%(no) riga(0..39).
+%(no) colonna(0..39).
 mela(39,39).
-casella(X,Y) :- riga(X), colonna(Y).
+%(no) casella(X,Y) :- riga(X), colonna(Y).
 rigaMax(5).
 colMax(5).
 % caselle raggiungibili direttamente 

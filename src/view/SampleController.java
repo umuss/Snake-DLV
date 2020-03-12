@@ -1,8 +1,17 @@
 package view;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
+import it.unical.mat.embasp.base.Handler;
+import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.Output;
+import it.unical.mat.embasp.languages.asp.ASPInputProgram;
+import it.unical.mat.embasp.languages.asp.AnswerSet;
+import it.unical.mat.embasp.languages.asp.AnswerSets;
+import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
+import it.unical.mat.embasp.specializations.dlv2.desktop.DLV2DesktopService;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Pair;
+import model.Casella;
 import model.Coda;
 import model.Direction;
 import model.GestoreScene;
@@ -28,6 +38,7 @@ public class SampleController {
 	Snake snake = new Snake();
 	Mela mela = new Mela(new Random().nextInt(32), new Random().nextInt(32));
 	boolean hoDisegnato = false;
+	private Handler handler;
 
 	@FXML
 	private Label labelPunteggio;
@@ -117,6 +128,51 @@ public class SampleController {
 
 	public void verificaProssimaCella(Direction dir) {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
+		handler = new DesktopHandler(new DLV2DesktopService("lib" + File.separator + "dlv2.exe"));
+		InputProgram facts = new ASPInputProgram();
+		for (int i = 0; i < 32; i++) {
+			for (int j = 0; j < 32; j++) {
+				try {
+					facts.addObjectInput(new Casella(i, j));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		try {
+			facts.addObjectInput(mela);
+			facts.addObjectInput(snake.getTesta());
+			// non so se funziona sta cosa
+			facts.addProgram("rigaMax(31).");
+			facts.addProgram("colMax(31).");
+			for (Coda c : snake.getCode())
+				facts.addObjectInput(c);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		handler.addProgram(facts);
+		InputProgram encoding = new ASPInputProgram();
+		encoding.addFilesPath("encodings" + File.separator + "sudoku");
+		handler.addProgram(encoding);
+
+		Output o = handler.startSync();
+		AnswerSets answers = (AnswerSets) o;
+		for (AnswerSet a : answers.getAnswersets()) {
+			try {
+				for (Object obj : a.getAtoms()) {
+					// Ma ci serve una classe FinalPath??
+					if (!(obj instanceof Casella))
+						continue;
+					else {
+						// prendo la direzione dal finalpath e la do alla view (credo)
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getCol() >= 32) {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
