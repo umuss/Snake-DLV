@@ -58,6 +58,7 @@ public class Casella {
 	public void setRow(int row) {
 		if (this.row - row > 0) {
 			this.posY -= passo;
+			System.out.println("+=");
 		} else {
 			this.posY += passo;
 		}
@@ -72,6 +73,7 @@ public class Casella {
 	public void setCol(int col) {
 		if (this.col - col > 0) {
 			this.posX -= passo;
+			System.out.println("+=");
 		} else {
 			this.posX += passo;
 		}

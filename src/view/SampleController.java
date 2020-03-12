@@ -32,10 +32,10 @@ public class SampleController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 10) {
+				if (frame >= 80) {
 					hoDisegnato = true;
 					verificaCollisioneMela();
-					verificaAutoCollisione();
+					//verificaAutoCollisione();
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
@@ -141,8 +141,8 @@ public class SampleController {
 				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() - snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setPosX(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setPosY(posizioniVecchie.get(i).getValue());
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			}
 		}
@@ -159,8 +159,8 @@ public class SampleController {
 				}
 				snake.getTesta().setPosX(snake.getTesta().getPosX() - snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setPosX(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setPosY(posizioniVecchie.get(i).getValue());
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			}
 		}
@@ -174,8 +174,8 @@ public class SampleController {
 				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() + snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setPosX(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setPosY(posizioniVecchie.get(i).getValue());
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			}
 		}
