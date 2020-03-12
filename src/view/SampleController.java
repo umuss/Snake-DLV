@@ -82,30 +82,31 @@ public class SampleController {
 					// System.out.println("DOWN");
 					snake.getTesta().setDirection(Direction.DOWN);
 					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato && snake.getTesta().getDirection() != Direction.LEFT) {
+				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
+						&& snake.getTesta().getDirection() != Direction.LEFT) {
 					snake.getTesta().setDirection(Direction.RIGHT);
 					// System.out.println("right");
 					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato && snake.getTesta().getDirection() != Direction.RIGHT) {
+				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
+						&& snake.getTesta().getDirection() != Direction.RIGHT) {
 					snake.getTesta().setDirection(Direction.LEFT);
 					// System.out.println("left");
 					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.UP && hoDisegnato && snake.getTesta().getDirection() != Direction.DOWN) {
+				} else if (event.getCode() == KeyCode.UP && hoDisegnato
+						&& snake.getTesta().getDirection() != Direction.DOWN) {
 					snake.getTesta().setDirection(Direction.UP);
 					// System.out.println("up");
 					hoDisegnato = false;
 				}
-					
+
 			}
 		});
 	}
 
 	public void verificaProssimaCella(Direction dir) {
 		int cont = 1;
-		ArrayList<Pair<Float, Float>> posizioniVecchie = new ArrayList<>();
-		
-		
-		
+		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
+
 		if (dir == Direction.RIGHT) {
 			if (snake.getTesta().getPosX() >= mainCanvas.getWidth() - 30) {
 				snake.getTesta().setPosX(-50);
@@ -113,15 +114,16 @@ public class SampleController {
 					c.setPosX(-(50 + snake.getTesta().getPasso() * cont));
 					cont++;
 				}
+				// Caso non di sforamento
 			} else {
-				posizioniVecchie.add(new Pair<Float, Float>(snake.getTesta().getPosX(), snake.getTesta().getPosY()));
+				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Float, Float>(c.getPosX(), c.getPosY()));
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
-				snake.getTesta().setPosX(snake.getTesta().getPosX() + snake.getTesta().getPasso());
+				snake.getTesta().setCol(snake.getTesta().getCol() + 1);
 				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setPosX(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setPosY(posizioniVecchie.get(i).getValue());
+					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
 			}
 		}
@@ -133,9 +135,9 @@ public class SampleController {
 					cont++;
 				}
 			} else {
-				posizioniVecchie.add(new Pair<Float, Float>(snake.getTesta().getPosX(), snake.getTesta().getPosY()));
+				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Float, Float>(c.getPosX(), c.getPosY()));
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() - snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
@@ -151,9 +153,9 @@ public class SampleController {
 					c.setPosX(c.getPosX() + snake.getTesta().getPasso());
 				}
 			} else {
-				posizioniVecchie.add(new Pair<Float, Float>(snake.getTesta().getPosX(), snake.getTesta().getPosY()));
+				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Float, Float>(c.getPosX(), c.getPosY()));
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
 				snake.getTesta().setPosX(snake.getTesta().getPosX() - snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
@@ -166,9 +168,9 @@ public class SampleController {
 			if (snake.getTesta().getPosY() >= mainCanvas.getWidth() - 80) {
 				snake.getTesta().setPosY(-80);
 			} else {
-				posizioniVecchie.add(new Pair<Float, Float>(snake.getTesta().getPosX(), snake.getTesta().getPosY()));
+				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Float, Float>(c.getPosX(), c.getPosY()));
+					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 				}
 				snake.getTesta().setPosY(snake.getTesta().getPosY() + snake.getTesta().getPasso());
 				for (int i = 0; i < snake.getCode().size(); i++) {
@@ -186,7 +188,7 @@ public class SampleController {
 						&& snake.getTesta().getPosY() <= mela.getPosY() + 15)) {
 			mela.setPosX(new Random().nextInt(31) * snake.getTesta().getPasso());
 			mela.setPosY(new Random().nextInt(31) * snake.getTesta().getPasso());
-			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRiga() - 1,
+			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
 	}

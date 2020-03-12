@@ -9,17 +9,19 @@ public class Casella {
 	@Param(0)
 	private int row;
 	@Param(1)
-	private int column;
+	private int col;
 	private float posX;
 	private float posY;
 	private int passo;
 
 	public Casella(int r, int c) {
 		this.row = r;
-		this.column = c;
+		this.col = c;
 		this.passo = 25;
-		// passo 15: matrice 40x40 con risoluzione 600x600 (600/15 = 40) (troppo piccolo!!)
-		// passo 25: matrice 32x32, siccome abbiamo risoluzione di 800x800 ed 800/25 = 32.
+		// passo 15: matrice 40x40 con risoluzione 600x600 (600/15 = 40) (troppo
+		// piccolo!!)
+		// passo 25: matrice 32x32, siccome abbiamo risoluzione di 800x800 ed 800/25 =
+		// 32.
 		// passo 25 (con risoluzione 600x600): matrice 24x24.
 		this.posX = c * passo;
 		this.posY = r * passo;
@@ -54,14 +56,26 @@ public class Casella {
 	}
 
 	public void setRow(int row) {
+		if (this.row - row > 0) {
+			this.posY -= passo;
+		} else {
+			this.posY += passo;
+		}
 		this.row = row;
+				
 	}
 
-	public int getColumn() {
-		return column;
+	public int getCol() {
+		return col;
 	}
 
-	public void setColumn(int column) {
-		this.column = column;
+	public void setCol(int col) {
+		if (this.col - col > 0) {
+			this.posX -= passo;
+		} else {
+			this.posX += passo;
+		}
+		this.col = col;
+
 	}
 }
