@@ -1,8 +1,4 @@
-% Fatti
-
-
 % Regole per caselle raggiungibili direttamente 
-
 
 % Right
 raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1+1.
@@ -13,20 +9,20 @@ raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1-1.
 % Down
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1+1.
 
-%upToroidal
-raggiunge(X,Y) :- testa(0,Y), casella(X,Y), not coda(X,Y), X=31.
-%downToroidal
-raggiunge(0,Y) :- testa(Z,Y), casella(0,Y), not coda(0,Y), Z=31.
-%leftToroidal
-raggiunge(X,Y) :- testa(X,0), casella(X,Y), not coda(X,Y), Y=31.
-%rightToroidal
-raggiunge(X,0) :- testa(X,Z), casella(X,0), not coda(X,0), Z=31.
+% Up Toroidal
+raggiunge(X,23) :- testa(X,0), casella(X,23), not coda(X,23).
+% Down Toroidal
+raggiunge(X,0) :- testa(X,23), casella(X,0), not coda(X,0).
+% Left Toroidal
+raggiunge(23,Y) :- testa(0,Y), casella(23,Y), not coda(23,Y).
+% Right Toroidal
+raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
 
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1+1.
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1-1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X=X1+1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X=X1-1.
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1.
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1.
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1.
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1.
 
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 :- mela(X,Y),not inFinalPath(X,Y).
-:~ inFinalPath(X,Y).[1@1,X,Y]
+:~ inFinalPath(X,Y). [1@1,X,Y]

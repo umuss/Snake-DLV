@@ -26,7 +26,7 @@ public class Main extends Application {
 					BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 			root.setBackground(new Background(myBI));
 			SampleController sampleController = loader.getController();
-			Scene scene = new Scene(root, 800, 840);
+			Scene scene = new Scene(root, 600, 640);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			GestoreScene.setScenaCorrente(scene);
 			primaryStage.setScene(scene);

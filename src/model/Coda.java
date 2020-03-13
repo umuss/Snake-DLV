@@ -15,18 +15,21 @@ public class Coda {
 	private float posX;
 	private float posY;
 	private int passo;
+
 	public Coda(int row, int column) {
-		this.row=row;
-		this.col=column;
+		this.row = row;
+		this.col = column;
 		image = new Image("file:assets/tail.png");
 		this.direction = Direction.RIGHT;
-		this.passo=25;
-		this.posX=column*passo;
-		this.posY=row*passo;
+		this.passo = 25;
+		this.posX = column * passo;
+		this.posY = row * passo;
 	}
+
 	public Coda() {
-		
+
 	}
+
 	public int getPasso() {
 		return passo;
 	}
@@ -94,18 +97,21 @@ public class Coda {
 		this.col = col;
 
 	}
+
 	public Image getImage() {
 		return image;
 	}
+
 	public void setImage(Image image) {
 		this.image = image;
 	}
+
 	public Direction getDirection() {
 		return direction;
 	}
+
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-
 
 }
