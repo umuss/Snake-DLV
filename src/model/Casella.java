@@ -3,7 +3,7 @@ package model;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("inFinalPath")
+@Id("casella")
 public class Casella {
 
 	@Param(0)
@@ -14,6 +14,11 @@ public class Casella {
 	private float posY;
 	private int passo;
 
+	
+	public Casella() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public Casella(int r, int c) {
 		this.row = r;
 		this.col = c;

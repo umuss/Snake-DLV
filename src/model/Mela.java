@@ -13,6 +13,9 @@ public class Mela extends Casella {
 		image = new Image("file:assets/mela.png");
 	}
 
+	public Mela() {
+		super();
+	}
 
 	public Image getImage() {
 		return image;

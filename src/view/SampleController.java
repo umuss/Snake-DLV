@@ -1,11 +1,13 @@
 package view;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.OptionDescriptor;
 import it.unical.mat.embasp.base.Output;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 import it.unical.mat.embasp.languages.asp.AnswerSet;
@@ -13,17 +15,14 @@ import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
 import it.unical.mat.embasp.specializations.dlv2.desktop.DLV2DesktopService;
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.util.Pair;
 import model.Casella;
 import model.Coda;
 import model.Direction;
-import model.GestoreScene;
+import model.InFinalPath;
 import model.Mela;
 import model.Snake;
 
@@ -38,7 +37,7 @@ public class SampleController {
 	Snake snake = new Snake();
 	Mela mela = new Mela(new Random().nextInt(32), new Random().nextInt(32));
 	boolean hoDisegnato = false;
-	private Handler handler;
+	private Handler handler = null;
 
 	@FXML
 	private Label labelPunteggio;
@@ -49,7 +48,7 @@ public class SampleController {
 			public void handle(long now) {
 				if (frame >= 10) {
 					hoDisegnato = true;
-					
+
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
@@ -131,6 +130,7 @@ public class SampleController {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 
 		handler = new DesktopHandler(new DLV2DesktopService("lib" + File.separator + "dlv2.exe"));
+		handler.addOption(new OptionDescriptor("--filter=outFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 		for (int i = 0; i < 32; i++) {
 			for (int j = 0; j < 32; j++) {
@@ -158,25 +158,38 @@ public class SampleController {
 		Output o = handler.startSync();
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
-		Casella nextMove = null;
+		InFinalPath nextMove = new InFinalPath(3, 3);
 		for (AnswerSet a : answers.getAnswersets()) {
+			System.out.println("Inizio Answer Set");
+			try {
+				System.out.println("Size Answer Set: " + a.getAtoms().size());
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException | InstantiationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (trovatoCasella) {
 				break;
 			}
 			try {
 				for (Object obj : a.getAtoms()) {
 					// Ma ci serve una classe FinalPath??
-					if ((obj instanceof Casella)) {
-						trovatoCasella = true;
-						nextMove = (Casella) obj;
-						break;
-					}
+					// if ((obj instanceof InFinalPath)) {
+					System.out.println("Istanza di finalPath");
+					// System.out.println("Classe Atomo: " + obj.getClass());
+					// trovatoCasella = true;
+					nextMove = (InFinalPath) obj;
+					// System.out.println("riga: " + nextMove.getRow() + " colonna: " +
+					// nextMove.getCol());
+					// break;
+					// }
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			System.out.println("Finito Answer Set");
 		}
-		
+
 		posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 		for (Coda c : snake.getCode()) {
 			posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));

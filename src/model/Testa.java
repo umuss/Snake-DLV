@@ -27,7 +27,9 @@ public class Testa extends Casella {
 		this.direction = Direction.RIGHT;
 	}
 
-	
+	public Testa() {
+		super();
+	}
 
 	
 

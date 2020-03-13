@@ -18,6 +18,10 @@ public class Coda extends Casella {
 		this.direction = Direction.RIGHT;
 	}
 
+	public Coda() {
+		super();
+	}
+	
 	public Image getImage() {
 		return image;
 	}
