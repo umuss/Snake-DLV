@@ -134,7 +134,7 @@ public class GameController {
 
 		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
 		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
-	
+
 		return cond1 || cond2;
 
 	}
@@ -148,7 +148,10 @@ public class GameController {
 			e.printStackTrace();
 		}
 
-		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+		if (System.getProperty("os.name").contains("Linux")) {
+			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+		} else
+			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
 		handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 
