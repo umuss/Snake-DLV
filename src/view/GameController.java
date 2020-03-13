@@ -46,7 +46,7 @@ public class GameController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 100) {
+				if (frame >= 10) {
 					hoDisegnato = true;
 
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
@@ -130,10 +130,11 @@ public class GameController {
 		int rowTesta = snake.getTesta().getRow();
 		int colTesta = snake.getTesta().getCol();
 		int rowStep = step.getRow();
-		int colStep = step.getRow();
+		int colStep = step.getCol();
 
 		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
 		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
+	
 		return cond1 || cond2;
 
 	}
