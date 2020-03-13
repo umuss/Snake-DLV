@@ -4,7 +4,7 @@ import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 import javafx.scene.image.Image;
 
-@Id("testa")
+@Id("coda")
 public class Coda {
 	@Param(0)
 	private int row;

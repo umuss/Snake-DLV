@@ -1,6 +1,5 @@
 package view;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +9,7 @@ import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.OptionDescriptor;
 import it.unical.mat.embasp.base.Output;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
+import it.unical.mat.embasp.languages.asp.ASPMapper;
 import it.unical.mat.embasp.languages.asp.AnswerSet;
 import it.unical.mat.embasp.languages.asp.AnswerSets;
 import it.unical.mat.embasp.platforms.desktop.DesktopHandler;
@@ -130,6 +130,13 @@ public class SampleController {
 	public void verificaProssimaCella(Direction dir) {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 
+		try {
+			ASPMapper.getInstance().registerClass(InFinalPath.class);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
