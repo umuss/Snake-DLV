@@ -25,6 +25,7 @@ import model.Direction;
 import model.InFinalPath;
 import model.Mela;
 import model.Snake;
+import model.Testa;
 
 // Matrice: dimensione 32x32
 
@@ -129,8 +130,8 @@ public class SampleController {
 	public void verificaProssimaCella(Direction dir) {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 
-		handler = new DesktopHandler(new DLV2DesktopService("lib" + File.separator + "dlv2.exe"));
-		handler.addOption(new OptionDescriptor("--filter=outFinalPath/2 "));
+		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+		handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 		for (int i = 0; i < 32; i++) {
 			for (int j = 0; j < 32; j++) {
@@ -142,25 +143,33 @@ public class SampleController {
 			}
 		}
 		try {
-			facts.addObjectInput(mela);
-			facts.addObjectInput(snake.getTesta());
-			for (Coda c : snake.getCode())
-				facts.addObjectInput(c);
+			facts.addObjectInput(new Mela(mela.getRow(),mela.getCol()));
+			facts.addObjectInput(new Testa(snake.getTesta().getRow(),snake.getTesta().getCol()));
+			//facts.addProgram("rigaMax(31).");
+			//facts.addProgram("colMax(31).");
+			for (Coda c : snake.getCode()) {
+				
+				facts.addObjectInput(new Coda(c.getRow(),c.getCol()));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		handler.addProgram(facts);
 		InputProgram encoding = new ASPInputProgram();
-		encoding.addFilesPath("encodings" + File.separator + "percorso");
+		encoding.addFilesPath("encodings/percorso");
 		handler.addProgram(encoding);
 
 		Output o = handler.startSync();
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
-		InFinalPath nextMove = new InFinalPath(3, 3);
+		InFinalPath nextMove = new InFinalPath();
+		int cont=0;
+		System.out.println(answers.getAnswersets().size());
 		for (AnswerSet a : answers.getAnswersets()) {
-			System.out.println("Inizio Answer Set");
+			//System.out.println("Inizio Answer Set");
+		
+			
 			try {
 				System.out.println("Size Answer Set: " + a.getAtoms().size());
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -175,10 +184,16 @@ public class SampleController {
 				for (Object obj : a.getAtoms()) {
 					// Ma ci serve una classe FinalPath??
 					// if ((obj instanceof InFinalPath)) {
-					System.out.println("Istanza di finalPath");
+					//System.out.println("Istanza di finalPath");
 					// System.out.println("Classe Atomo: " + obj.getClass());
 					// trovatoCasella = true;
-					nextMove = (InFinalPath) obj;
+					if((obj instanceof InFinalPath)){
+						nextMove = (InFinalPath) obj;
+						System.out.println("TROVATO");
+						//trovatoCasella=true;
+						cont++;
+						//break;
+					}
 					// System.out.println("riga: " + nextMove.getRow() + " colonna: " +
 					// nextMove.getCol());
 					// break;
@@ -187,9 +202,9 @@ public class SampleController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			System.out.println("Finito Answer Set");
+			//System.out.println("Finito Answer Set");
 		}
-
+		//System.out.println(cont+"CONT");
 		posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
 		for (Coda c : snake.getCode()) {
 			posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));

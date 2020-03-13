@@ -1,6 +1,5 @@
 % Fatti
-rigaMax(31).
-colMax(31).
+
 
 % Regole per caselle raggiungibili direttamente 
 
@@ -15,13 +14,13 @@ raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1-1.
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1+1.
 
 %upToroidal
-raggiunge(X,Y) :- testa(0,Y), casella(X,Y), not coda(X,Y), rigaMax(X).
+raggiunge(X,Y) :- testa(0,Y), casella(X,Y), not coda(X,Y), X=31.
 %downToroidal
-raggiunge(0,Y) :- testa(Z,Y), casella(0,Y), not coda(0,Y), rigaMax(Z).
+raggiunge(0,Y) :- testa(Z,Y), casella(0,Y), not coda(0,Y), Z=31.
 %leftToroidal
-raggiunge(X,Y) :- testa(X,0), casella(X,Y), not coda(X,Y), colMax(Y).
+raggiunge(X,Y) :- testa(X,0), casella(X,Y), not coda(X,Y), Y=31.
 %rightToroidal
-raggiunge(X,0) :- testa(X,Z), casella(X,0), not coda(X,0), colMax(Z).
+raggiunge(X,0) :- testa(X,Z), casella(X,0), not coda(X,0), Z=31.
 
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1+1.
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1-1.
