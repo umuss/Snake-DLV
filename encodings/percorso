@@ -1,14 +1,9 @@
-% fatti (che otteniamo da Java)
-testa(0,37). 
-coda(1,0). 
-%(no) riga(0..39).
-%(no) colonna(0..39).
-mela(39,39).
-%(no) casella(X,Y) :- riga(X), colonna(Y).
-rigaMax(5).
-colMax(5).
+% fatti
+rigaMax(31).
+colMax(31).
 % caselle raggiungibili direttamente 
 % (muovo riga -> muovo X, muovo colonna -> muovo Y)
+
 %right
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y),not coda(X,Y),Y = Y1+1.
 %left
@@ -17,6 +12,7 @@ raggiunge(X,Y) :- testa(X,Y1), casella(X,Y),not coda(X,Y),Y = Y1-1.
 raggiunge(X,Y) :- testa(X1,Y), casella(X,Y),not coda(X,Y),X = X1-1.
 %down
 raggiunge(X,Y) :- testa(X1,Y), casella(X,Y),not coda(X,Y),X = X1+1.
+
 %upToroidal
 raggiunge(X,Y):-testa(0,Y),casella(X,Y),not coda(X,Y),rigaMax(X).
 %downToroidal
@@ -26,12 +22,11 @@ raggiunge(X,Y):-testa(X,0),casella(X,Y),not coda(X,Y),colMax(Y).
 %rightToroidal
 raggiunge(X,0):-testa(X,Z),casella(X,0),not coda(X,0),colMax(Z).
 
-raggiunge(X,Y) :- inFinalPath(X,Y1),casella(X,Y),Y=Y1+1.
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y),Y=Y1-1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y),X=X1+1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y),X=X1-1.
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1+1.
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y=Y1-1.
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X=X1+1.
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X=X1-1.
 
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 :-mela(X,Y),not inFinalPath(X,Y).
 :~inFinalPath(X,Y).[1@1,X,Y]
-

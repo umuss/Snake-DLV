@@ -8,18 +8,13 @@ import javafx.scene.image.Image;
 
 @Id("testa")
 public class Testa extends Casella {
-	@Param(0)
-	private int riga;
-	@Param(1)
-	private int col;
+
 	private ArrayList<Image> images;
 	private Image imageCorrente;
 	private Direction direction;
 
 	public Testa(int row, int column) {
 		super(row, column);
-		riga = row;
-		col = column;
 		images = new ArrayList<Image>();
 		
 		// da sostituire con le bitmap ruotate

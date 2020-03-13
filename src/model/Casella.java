@@ -3,7 +3,7 @@ package model;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("casella")
+@Id("inFinalPath")
 public class Casella {
 
 	@Param(0)

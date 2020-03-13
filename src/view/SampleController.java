@@ -49,8 +49,7 @@ public class SampleController {
 			public void handle(long now) {
 				if (frame >= 10) {
 					hoDisegnato = true;
-					verificaCollisioneMela();
-					verificaAutoCollisione();
+					
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
@@ -84,39 +83,41 @@ public class SampleController {
 					for (Coda c : snake.getCode()) {
 						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
 					}
+					verificaCollisioneMela();
+					verificaAutoCollisione();
 				}
 				frame += 1;
 			}
 		};
 		tm.start();
-		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-
-				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP
-						&& compreso()) {
-					// System.out.println("DOWN");
-					snake.getTesta().setDirection(Direction.DOWN);
-					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.LEFT && compreso()) {
-					snake.getTesta().setDirection(Direction.RIGHT);
-					// System.out.println("right");
-					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.RIGHT && compreso()) {
-					snake.getTesta().setDirection(Direction.LEFT);
-					// System.out.println("left");
-					hoDisegnato = false;
-				} else if (event.getCode() == KeyCode.UP && hoDisegnato
-						&& snake.getTesta().getDirection() != Direction.DOWN && compreso()) {
-					snake.getTesta().setDirection(Direction.UP);
-					// System.out.println("up");
-					hoDisegnato = false;
-				}
-
-			}
-		});
+//		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
+//			@Override
+//			public void handle(KeyEvent event) {
+//
+//				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP
+//						&& compreso()) {
+//					// System.out.println("DOWN");
+//					snake.getTesta().setDirection(Direction.DOWN);
+//					hoDisegnato = false;
+//				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
+//						&& snake.getTesta().getDirection() != Direction.LEFT && compreso()) {
+//					snake.getTesta().setDirection(Direction.RIGHT);
+//					// System.out.println("right");
+//					hoDisegnato = false;
+//				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
+//						&& snake.getTesta().getDirection() != Direction.RIGHT && compreso()) {
+//					snake.getTesta().setDirection(Direction.LEFT);
+//					// System.out.println("left");
+//					hoDisegnato = false;
+//				} else if (event.getCode() == KeyCode.UP && hoDisegnato
+//						&& snake.getTesta().getDirection() != Direction.DOWN && compreso()) {
+//					snake.getTesta().setDirection(Direction.UP);
+//					// System.out.println("up");
+//					hoDisegnato = false;
+//				}
+//
+//			}
+//		});
 	}
 
 	public boolean compreso() {
@@ -128,6 +129,7 @@ public class SampleController {
 
 	public void verificaProssimaCella(Direction dir) {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
+
 		handler = new DesktopHandler(new DLV2DesktopService("lib" + File.separator + "dlv2.exe"));
 		InputProgram facts = new ASPInputProgram();
 		for (int i = 0; i < 32; i++) {
@@ -142,132 +144,144 @@ public class SampleController {
 		try {
 			facts.addObjectInput(mela);
 			facts.addObjectInput(snake.getTesta());
-			// non so se funziona sta cosa
-			facts.addProgram("rigaMax(31).");
-			facts.addProgram("colMax(31).");
 			for (Coda c : snake.getCode())
 				facts.addObjectInput(c);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		handler.addProgram(facts);
 		InputProgram encoding = new ASPInputProgram();
-		encoding.addFilesPath("encodings" + File.separator + "sudoku");
+		encoding.addFilesPath("encodings" + File.separator + "percorso");
 		handler.addProgram(encoding);
 
 		Output o = handler.startSync();
 		AnswerSets answers = (AnswerSets) o;
+		boolean trovatoCasella = false;
+		Casella nextMove = null;
 		for (AnswerSet a : answers.getAnswersets()) {
+			if (trovatoCasella) {
+				break;
+			}
 			try {
 				for (Object obj : a.getAtoms()) {
 					// Ma ci serve una classe FinalPath??
-					if (!(obj instanceof Casella))
-						continue;
-					else {
-						// prendo la direzione dal finalpath e la do alla view (credo)
+					if ((obj instanceof Casella)) {
+						trovatoCasella = true;
+						nextMove = (Casella) obj;
+						break;
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
-		if (dir == Direction.RIGHT) {
-			if (snake.getTesta().getCol() >= 32) {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setCol(0);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-				// System.out.println("STO SFORANDO");
-				// Caso non di sforamento
-			} else {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setCol(snake.getTesta().getCol() + 1);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			}
+		
+		posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+		for (Coda c : snake.getCode()) {
+			posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
 		}
-		if (dir == Direction.UP) {
-			if (snake.getTesta().getRow() <= 0) {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setRow(31);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			} else {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setRow(snake.getTesta().getRow() - 1);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			}
-		}
-		if (dir == Direction.LEFT) {
-			if (snake.getTesta().getCol() <= 0) {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setCol(31);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			} else {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setCol(snake.getTesta().getCol() - 1);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			}
-		}
-		if (dir == Direction.DOWN) {
-			if (snake.getTesta().getRow() >= 32) {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setRow(0);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			} else {
-				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
-				for (Coda c : snake.getCode()) {
-					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
-				}
-				snake.getTesta().setRow(snake.getTesta().getRow() + 1);
-				for (int i = 0; i < snake.getCode().size(); i++) {
-					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
-					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
-				}
-			}
+		snake.getTesta().setRow(nextMove.getRow());
+		snake.getTesta().setCol(nextMove.getCol());
+		for (int i = 0; i < snake.getCode().size(); i++) {
+			snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+			snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 		}
 
+//		if (dir == Direction.RIGHT) {
+//			if (snake.getTesta().getCol() >= 32) {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setCol(0);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//				// System.out.println("STO SFORANDO");
+//				// Caso non di sforamento
+//			} else {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setCol(snake.getTesta().getCol() + 1);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			}
+//		}
+//		if (dir == Direction.UP) {
+//			if (snake.getTesta().getRow() <= 0) {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setRow(31);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			} else {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setRow(snake.getTesta().getRow() - 1);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			}
+//		}
+//		if (dir == Direction.LEFT) {
+//			if (snake.getTesta().getCol() <= 0) {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setCol(31);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			} else {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setCol(snake.getTesta().getCol() - 1);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			}
+//		}
+//		if (dir == Direction.DOWN) {
+//			if (snake.getTesta().getRow() >= 32) {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setRow(0);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			} else {
+//				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
+//				for (Coda c : snake.getCode()) {
+//					posizioniVecchie.add(new Pair<Integer, Integer>(c.getCol(), c.getRow()));
+//				}
+//				snake.getTesta().setRow(snake.getTesta().getRow() + 1);
+//				for (int i = 0; i < snake.getCode().size(); i++) {
+//					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
+//					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
+//				}
+//			}
+//		}
 	}
 
 	public void verificaCollisioneMela() {
