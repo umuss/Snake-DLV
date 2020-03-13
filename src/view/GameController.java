@@ -28,14 +28,14 @@ import model.Testa;
 
 // Matrice: dimensione 32x32
 
-public class SampleController {
+public class GameController {
 
 	@FXML
 	private Canvas mainCanvas;
 	private double frame = 5;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
-	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24));
+	Mela mela = new Mela(20, 20);
 	boolean hoDisegnato = false;
 	private Handler handler = null;
 
@@ -46,7 +46,7 @@ public class SampleController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 10) {
+				if (frame >= 100) {
 					hoDisegnato = true;
 
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
@@ -126,6 +126,18 @@ public class SampleController {
 //		return false;
 //	}
 
+	public boolean isValid(InFinalPath step) {
+		int rowTesta = snake.getTesta().getRow();
+		int colTesta = snake.getTesta().getCol();
+		int rowStep = step.getRow();
+		int colStep = step.getRow();
+
+		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
+		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
+		return cond1 || cond2;
+
+	}
+
 	public void verificaProssimaCella(Direction dir) {
 
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
@@ -161,17 +173,17 @@ public class SampleController {
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
-		System.out.println(answers.getAnswersets().size());
 		for (AnswerSet a : answers.getAnswersets()) {
 			if (trovatoCasella)
 				break;
-
 			try {
 				for (Object obj : a.getAtoms()) {
-					nextMove = (InFinalPath) obj;
-					trovatoCasella = true;
-					System.out.println("Prendo come finalPath " + nextMove.getRow() + "," + nextMove.getCol());
-					break;
+					if (isValid((InFinalPath) obj)) {
+						nextMove = (InFinalPath) obj;
+						trovatoCasella = true;
+						System.out.println("Prendo come finalPath " + nextMove.getRow() + "," + nextMove.getCol());
+						break;
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

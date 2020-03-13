@@ -18,11 +18,17 @@ raggiunge(23,Y) :- testa(0,Y), casella(23,Y), not coda(23,Y).
 % Right Toroidal
 raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
 
+% Regole per caselle raggiungibili indirettamente 
+
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1.
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1.
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1.
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1.
 
+% Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
-:- mela(X,Y),not inFinalPath(X,Y).
+
+% Vincolo: devo per forza raggiungere la mela
+:- mela(X,Y), not inFinalPath(X,Y).
+% Vincolo: voglio fare meno passi possibile
 :~ inFinalPath(X,Y). [1@1,X,Y]

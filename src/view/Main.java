@@ -17,15 +17,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			// BorderPane root =
-			// (BorderPane)FXMLLoader.load(getClass().getResource("Sample.fxml"));
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Sample.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameView.fxml"));
 			BorderPane root = (BorderPane) loader.load();
 			BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, true);
 			BackgroundImage myBI = new BackgroundImage(new Image("file:assets/background.png"), BackgroundRepeat.REPEAT,
 					BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 			root.setBackground(new Background(myBI));
-			SampleController sampleController = loader.getController();
+			GameController sampleController = loader.getController();
 			Scene scene = new Scene(root, 600, 640);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			GestoreScene.setScenaCorrente(scene);
