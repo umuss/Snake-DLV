@@ -9,10 +9,10 @@ public class Snake {
 	
 	public Snake() {
 		//matrice 32x32
-		testa = new Testa(1,3);
+		testa = new Testa(22,1);
 		code = new ArrayList<Coda>();
-		code.add(new Coda(1,2));
-		code.add(new Coda(1,1));
+		code.add(new Coda(21,1));
+		code.add(new Coda(20,1));
 		punteggio = 0;
 	
 	}

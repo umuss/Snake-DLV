@@ -35,7 +35,7 @@ public class GameController {
 	private double frame = 5;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
-	Mela mela = new Mela(20, 20);
+	Mela mela = new Mela(1, 1);
 	boolean hoDisegnato = false;
 	private Handler handler = null;
 
@@ -46,7 +46,7 @@ public class GameController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 10) {
+				if (frame >= 50) {
 					hoDisegnato = true;
 
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
@@ -134,8 +134,12 @@ public class GameController {
 
 		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
 		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
+		boolean toroidalityRow = ((colStep == colTesta)
+				&& ((rowStep == 23 && rowTesta == 0) || (rowStep == 0 && rowTesta == 23)));
+		boolean toroidalityCol = ((rowStep == rowTesta)
+				&& ((colStep == 23 && colTesta == 0) || (colStep == 0 && colTesta == 23)));
 
-		return cond1 || cond2;
+		return cond1 || cond2 || toroidalityCol || toroidalityRow;
 
 	}
 
