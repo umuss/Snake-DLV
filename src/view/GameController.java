@@ -46,7 +46,7 @@ public class GameController {
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				if (frame >= 50) {
+				if (frame >= 5) {
 					hoDisegnato = true;
 
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
@@ -131,15 +131,39 @@ public class GameController {
 		int colTesta = snake.getTesta().getCol();
 		int rowStep = step.getRow();
 		int colStep = step.getCol();
-
-		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
-		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
-		boolean toroidalityRow = ((colStep == colTesta)
-				&& ((rowStep == 23 && rowTesta == 0) || (rowStep == 0 && rowTesta == 23)));
-		boolean toroidalityCol = ((rowStep == rowTesta)
-				&& ((colStep == 23 && colTesta == 0) || (colStep == 0 && colTesta == 23)));
-
-		return cond1 || cond2 || toroidalityCol || toroidalityRow;
+		//right
+		if(rowTesta==rowStep && colStep==colTesta+1)
+			return true;
+		//left
+		if(rowTesta==rowStep && colStep==colTesta-1)
+			return true;
+		//down
+		if(colTesta==colStep && rowStep==rowTesta+1)
+			return true;
+		//up
+		if(colTesta==colStep && rowStep==rowTesta-1)
+			return true;
+		//right toroidal
+		if(rowTesta==rowStep && (colStep==0 && colTesta==23))
+			return true;
+		//left toroidal
+		if(rowTesta==rowStep && (colStep==23 && colTesta==0))
+			return true;
+		//down toroidal
+		if(colTesta==colStep && (rowStep==0 && rowTesta==23))
+			return true;
+		//up toroidal
+		if(colTesta==colStep && (rowStep==23 && rowTesta==0))
+			return true;
+		return false;
+//		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
+//		boolean cond2 = ((colStep == colTesta - 1 || colStep == colTesta + 1) && rowStep == rowTesta);
+//		boolean toroidalityRow = ((colStep == colTesta)
+//				&& ((rowStep == 23 && rowTesta == 0) || (rowStep == 0 && rowTesta == 23)));
+//		boolean toroidalityCol = ((rowStep == rowTesta)
+//				&& ((colStep == 23 && colTesta == 0) || (colStep == 0 && colTesta == 23)));
+//
+//		return cond1 || cond2 || toroidalityCol || toroidalityRow;
 
 	}
 
@@ -163,10 +187,10 @@ public class GameController {
 			for (int i = 0; i < 24; i++)
 				for (int j = 0; j < 24; j++)
 					facts.addObjectInput(new Casella(i, j));
-			facts.addObjectInput(new Mela(mela.getRow(), mela.getCol()));
-			facts.addObjectInput(new Testa(snake.getTesta().getRow(), snake.getTesta().getCol()));
+			facts.addObjectInput(mela);
+			facts.addObjectInput(snake.getTesta());
 			for (Coda c : snake.getCode()) {
-				facts.addObjectInput(new Coda(c.getRow(), c.getCol()));
+				facts.addObjectInput(c);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -181,6 +205,10 @@ public class GameController {
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
+		if(answers.getAnswersets().size()==0) {
+			System.out.println("HAI PERSO");
+			System.exit(0);
+		}
 		for (AnswerSet a : answers.getAnswersets()) {
 			if (trovatoCasella)
 				break;
@@ -310,8 +338,9 @@ public class GameController {
 			System.out.println("prendo mela");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
-			mela.setCol(new Random().nextInt(24));
-			mela.setRow(new Random().nextInt(24));
+			mela.setCol(getValidCoordinates().getKey());
+			mela.setRow(getValidCoordinates().getValue());
+			System.out.println(mela.getRow()+" "+mela.getCol());
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
@@ -319,11 +348,26 @@ public class GameController {
 
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
-
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
 				System.out.println("AUTOCOLLISIONE");
 			}
 		}
 	}
-
+	public Pair<Integer,Integer> getValidCoordinates(){
+		Random r=new Random();
+		Integer row;
+		Integer col;
+		while(true) {
+			row=r.nextInt(24);
+			col=r.nextInt(24);
+			if(row==snake.getTesta().getRow() && col==snake.getTesta().getCol())
+				continue;
+			for (Coda c : snake.getCode()) {
+				if(row==c.getRow() && col==c.getCol())
+					continue;
+			}
+			break;
+		}
+		return new Pair<Integer,Integer>(row,col);
+	}
 }

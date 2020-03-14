@@ -20,16 +20,16 @@ raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
 
 % Regole per caselle raggiungibili indirettamente 
 
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1.
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1.
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1.
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1,not coda(X,Y).
 
 % Regole per caselle raggiungibili indirettamente toroidalmente
-raggiunge(X,0) :- inFinalPath(X,23), casella(X,0).
-raggiunge(X,23) :- inFinalPath(X,0), casella(X,23).
-raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y).
-raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y).
+raggiunge(X,0) :- inFinalPath(X,23), casella(X,0),not coda(X,0).
+raggiunge(X,23) :- inFinalPath(X,0), casella(X,23),not coda(X,23).
+raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y),not coda(0,Y).
+raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y),not coda(23,Y).
 
 % Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
