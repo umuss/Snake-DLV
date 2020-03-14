@@ -47,8 +47,9 @@ public class GameController {
 			@Override
 			public void handle(long now) {
 				if (frame >= 5) {
+					verificaCollisioneMela();
+					verificaAutoCollisione();
 					hoDisegnato = true;
-
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
 						mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(),
@@ -82,8 +83,6 @@ public class GameController {
 					for (Coda c : snake.getCode()) {
 						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
 					}
-					verificaCollisioneMela();
-					verificaAutoCollisione();
 				}
 				frame += 1;
 			}
@@ -207,6 +206,11 @@ public class GameController {
 		InFinalPath nextMove = new InFinalPath();
 		if(answers.getAnswersets().size()==0) {
 			System.out.println("HAI PERSO");
+//			for (Coda c : snake.getCode()) {
+//				System.out.println(c.getRow()+" "+c.getCol());
+//			}
+//			System.out.println("TESTA "+snake.getTesta().getRow()+" "+snake.getTesta().getCol());
+//			System.out.println("MELA"+mela.getRow()+" "+mela.getCol());
 			System.exit(0);
 		}
 		for (AnswerSet a : answers.getAnswersets()) {
@@ -217,7 +221,7 @@ public class GameController {
 					if (isValid((InFinalPath) obj)) {
 						nextMove = (InFinalPath) obj;
 						trovatoCasella = true;
-						System.out.println("Prendo come finalPath " + nextMove.getRow() + "," + nextMove.getCol());
+						//System.out.println("Prendo come finalPath " + nextMove.getRow() + "," + nextMove.getCol());
 						break;
 					}
 				}
@@ -338,9 +342,10 @@ public class GameController {
 			System.out.println("prendo mela");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
-			mela.setCol(getValidCoordinates().getKey());
-			mela.setRow(getValidCoordinates().getValue());
-			System.out.println(mela.getRow()+" "+mela.getCol());
+			Pair<Integer,Integer> coordinata=getValidCoordinates();
+			mela.setRow(coordinata.getKey());
+			mela.setCol(coordinata.getValue());
+			//System.out.println(mela.getRow()+" "+mela.getCol());
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
@@ -349,7 +354,7 @@ public class GameController {
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
-				System.out.println("AUTOCOLLISIONE");
+				//System.out.println("AUTOCOLLISIONE");
 			}
 		}
 	}
@@ -358,16 +363,21 @@ public class GameController {
 		Integer row;
 		Integer col;
 		while(true) {
+			boolean nonVaBene=false;
 			row=r.nextInt(24);
 			col=r.nextInt(24);
 			if(row==snake.getTesta().getRow() && col==snake.getTesta().getCol())
 				continue;
 			for (Coda c : snake.getCode()) {
-				if(row==c.getRow() && col==c.getCol())
-					continue;
+				if(row==c.getRow() && col==c.getCol()) {
+					nonVaBene=true;
+					break;
+				}
 			}
-			break;
+			if(nonVaBene==false)
+				break;
 		}
+		//System.out.println("MELA GENERATA "+row+" "+col);
 		return new Pair<Integer,Integer>(row,col);
 	}
 }
