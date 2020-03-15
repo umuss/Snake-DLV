@@ -23,6 +23,7 @@ import model.Coda;
 import model.Direction;
 import model.InFinalPath;
 import model.Mela;
+import model.Raggiunge;
 import model.Snake;
 import model.Testa;
 
@@ -35,9 +36,12 @@ public class GameController {
 	private double frame = 5;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
-	Mela mela = new Mela(1, 1);
+	ArrayList<Raggiunge> posizioniRaggiungibili = new ArrayList<>();
+	
+	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24));
 	boolean hoDisegnato = false;
 	private Handler handler = null;
+	
 
 	@FXML
 	private Label labelPunteggio;
@@ -47,8 +51,6 @@ public class GameController {
 			@Override
 			public void handle(long now) {
 				if (frame >= 5) {
-					verificaCollisioneMela();
-					verificaAutoCollisione();
 					hoDisegnato = true;
 					if (snake.getTesta().getDirection() == Direction.RIGHT) {
 						verificaProssimaCella(Direction.RIGHT);
@@ -83,6 +85,8 @@ public class GameController {
 					for (Coda c : snake.getCode()) {
 						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
 					}
+					verificaCollisioneMela();
+					verificaAutoCollisione();
 				}
 				frame += 1;
 			}
@@ -130,29 +134,29 @@ public class GameController {
 		int colTesta = snake.getTesta().getCol();
 		int rowStep = step.getRow();
 		int colStep = step.getCol();
-		//right
-		if(rowTesta==rowStep && colStep==colTesta+1)
+		// right
+		if (rowTesta == rowStep && colStep == colTesta + 1)
 			return true;
-		//left
-		if(rowTesta==rowStep && colStep==colTesta-1)
+		// left
+		if (rowTesta == rowStep && colStep == colTesta - 1)
 			return true;
-		//down
-		if(colTesta==colStep && rowStep==rowTesta+1)
+		// down
+		if (colTesta == colStep && rowStep == rowTesta + 1)
 			return true;
-		//up
-		if(colTesta==colStep && rowStep==rowTesta-1)
+		// up
+		if (colTesta == colStep && rowStep == rowTesta - 1)
 			return true;
-		//right toroidal
-		if(rowTesta==rowStep && (colStep==0 && colTesta==23))
+		// right toroidal
+		if (rowTesta == rowStep && (colStep == 0 && colTesta == 23))
 			return true;
-		//left toroidal
-		if(rowTesta==rowStep && (colStep==23 && colTesta==0))
+		// left toroidal
+		if (rowTesta == rowStep && (colStep == 23 && colTesta == 0))
 			return true;
-		//down toroidal
-		if(colTesta==colStep && (rowStep==0 && rowTesta==23))
+		// down toroidal
+		if (colTesta == colStep && (rowStep == 0 && rowTesta == 23))
 			return true;
-		//up toroidal
-		if(colTesta==colStep && (rowStep==23 && rowTesta==0))
+		// up toroidal
+		if (colTesta == colStep && (rowStep == 23 && rowTesta == 0))
 			return true;
 		return false;
 //		boolean cond1 = ((rowStep == rowTesta - 1 || rowStep == rowTesta + 1) && colStep == colTesta);
@@ -171,6 +175,7 @@ public class GameController {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 		try {
 			ASPMapper.getInstance().registerClass(InFinalPath.class);
+			ASPMapper.getInstance().registerClass(Raggiunge.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -179,7 +184,7 @@ public class GameController {
 			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		} else
 			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
-		handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
+		//handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 
 		try {
@@ -204,26 +209,29 @@ public class GameController {
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
-		if(answers.getAnswersets().size()==0) {
+		if (answers.getAnswersets().size() == 0) {
 			System.out.println("HAI PERSO");
-//			for (Coda c : snake.getCode()) {
-//				System.out.println(c.getRow()+" "+c.getCol());
-//			}
-//			System.out.println("TESTA "+snake.getTesta().getRow()+" "+snake.getTesta().getCol());
-//			System.out.println("MELA"+mela.getRow()+" "+mela.getCol());
 			System.exit(0);
 		}
 		for (AnswerSet a : answers.getAnswersets()) {
+			posizioniRaggiungibili.clear();
 			if (trovatoCasella)
 				break;
 			try {
 				for (Object obj : a.getAtoms()) {
-					if (isValid((InFinalPath) obj)) {
-						nextMove = (InFinalPath) obj;
-						trovatoCasella = true;
-						//System.out.println("Prendo come finalPath " + nextMove.getRow() + "," + nextMove.getCol());
-						break;
+					if (obj instanceof InFinalPath) {
+						if (isValid((InFinalPath) obj)) {
+							nextMove = (InFinalPath) obj;
+							trovatoCasella = true;
+							// System.out.println("Prendo come finalPath " + nextMove.getRow() + "," +
+							// nextMove.getCol());
+							break;
+						}
 					}
+					else if (obj instanceof Raggiunge) {
+						posizioniRaggiungibili.add((Raggiunge) obj);
+					}
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -342,10 +350,10 @@ public class GameController {
 			System.out.println("prendo mela");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
-			Pair<Integer,Integer> coordinata=getValidCoordinates();
+			Pair<Integer, Integer> coordinata = getValidCoordinates();
 			mela.setRow(coordinata.getKey());
 			mela.setCol(coordinata.getValue());
-			//System.out.println(mela.getRow()+" "+mela.getCol());
+			// System.out.println(mela.getRow()+" "+mela.getCol());
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
@@ -354,30 +362,36 @@ public class GameController {
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
-				//System.out.println("AUTOCOLLISIONE");
+				// System.out.println("AUTOCOLLISIONE");
 			}
 		}
 	}
-	public Pair<Integer,Integer> getValidCoordinates(){
-		Random r=new Random();
-		Integer row;
-		Integer col;
-		while(true) {
-			boolean nonVaBene=false;
-			row=r.nextInt(24);
-			col=r.nextInt(24);
-			if(row==snake.getTesta().getRow() && col==snake.getTesta().getCol())
-				continue;
-			for (Coda c : snake.getCode()) {
-				if(row==c.getRow() && col==c.getCol()) {
-					nonVaBene=true;
-					break;
-				}
-			}
-			if(nonVaBene==false)
-				break;
-		}
-		//System.out.println("MELA GENERATA "+row+" "+col);
-		return new Pair<Integer,Integer>(row,col);
+
+	public Pair<Integer, Integer> getValidCoordinates() {
+		Random r = new Random();
+		
+		int scelta = r.nextInt(posizioniRaggiungibili.size());
+		Raggiunge raggiunge = posizioniRaggiungibili.get(scelta);
+		return new Pair<Integer, Integer>(raggiunge.getRow(), raggiunge.getCol());
+		
+//		Integer row;
+//		Integer col;
+//		while (true) {
+//			boolean nonVaBene = false;
+//			row = r.nextInt(24);
+//			col = r.nextInt(24);
+//			if (row == snake.getTesta().getRow() && col == snake.getTesta().getCol())
+//				continue;
+//			for (Coda c : snake.getCode()) {
+//				if (row == c.getRow() && col == c.getCol()) {
+//					nonVaBene = true;
+//					break;
+//				}
+//			}
+//			if (nonVaBene == false)
+//				break;
+//		}
+//		// System.out.println("MELA GENERATA "+row+" "+col);
+//		return new Pair<Integer, Integer>(row, col);
 	}
 }
