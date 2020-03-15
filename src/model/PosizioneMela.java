@@ -3,19 +3,19 @@ package model;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("raggiunge")
-public class Raggiunge {
+@Id("posizioneMela")
+public class PosizioneMela {
 
 	@Param(0)
 	private int row;
 	@Param(1)
 	private int col;
 
-	public Raggiunge() {
+	public PosizioneMela() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Raggiunge(int r, int c) {
+	public PosizioneMela(int r, int c) {
 		this.row = r;
 		this.col = c;
 	}
@@ -25,6 +25,12 @@ public class Raggiunge {
 	}
 	public int getCol() {
 		return col;
+	}
+	public void setRow(int r) {
+		row=r;
+	}
+	public void setCol(int c) {
+		col=c;
 	}
 	
 }

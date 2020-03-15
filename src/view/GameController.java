@@ -23,7 +23,7 @@ import model.Coda;
 import model.Direction;
 import model.InFinalPath;
 import model.Mela;
-import model.Raggiunge;
+import model.PosizioneMela;
 import model.Snake;
 import model.Testa;
 
@@ -36,11 +36,12 @@ public class GameController {
 	private double frame = 5;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
-	ArrayList<Raggiunge> posizioniRaggiungibili = new ArrayList<>();
+	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
 	
 	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24));
 	boolean hoDisegnato = false;
-	private Handler handler = null;
+	private Handler handlerPath = null;
+	private Handler handlerApple=null;
 	
 
 	@FXML
@@ -175,15 +176,17 @@ public class GameController {
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
 		try {
 			ASPMapper.getInstance().registerClass(InFinalPath.class);
-			ASPMapper.getInstance().registerClass(Raggiunge.class);
+			ASPMapper.getInstance().registerClass(PosizioneMela.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		if (System.getProperty("os.name").contains("Linux")) {
-			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		} else
-			handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		//handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 
@@ -200,12 +203,12 @@ public class GameController {
 			e.printStackTrace();
 		}
 
-		handler.addProgram(facts);
+		handlerPath.addProgram(facts);
 		InputProgram encoding = new ASPInputProgram();
 		encoding.addFilesPath("encodings/percorso");
-		handler.addProgram(encoding);
+		handlerPath.addProgram(encoding);
 
-		Output o = handler.startSync();
+		Output o = handlerPath.startSync();
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
@@ -214,7 +217,7 @@ public class GameController {
 			System.exit(0);
 		}
 		for (AnswerSet a : answers.getAnswersets()) {
-			posizioniRaggiungibili.clear();
+			//posizioniRaggiungibili.clear();
 			if (trovatoCasella)
 				break;
 			try {
@@ -228,10 +231,6 @@ public class GameController {
 							break;
 						}
 					}
-					else if (obj instanceof Raggiunge) {
-						posizioniRaggiungibili.add((Raggiunge) obj);
-					}
-					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -347,7 +346,44 @@ public class GameController {
 
 	public void verificaCollisioneMela() {
 		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol())) {
-			System.out.println("prendo mela");
+			InputProgram facts = new ASPInputProgram();
+			posizioniRaggiungibili.clear();
+			try {
+				for (int i = 0; i < 24; i++)
+					for (int j = 0; j < 24; j++)
+						facts.addObjectInput(new Casella(i, j));
+				//facts.addObjectInput(mela);
+				facts.addObjectInput(snake.getTesta());
+				for (Coda c : snake.getCode()) {
+					facts.addObjectInput(c);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			handlerApple.addProgram(facts);
+			InputProgram encoding = new ASPInputProgram();
+			encoding.addFilesPath("encodings/posizioneMela");
+			handlerApple.addProgram(encoding);
+			handlerApple.addOption(new OptionDescriptor("--filter=posizioneMela/2 "));
+			Output o = handlerApple.startSync();
+			AnswerSets answers = (AnswerSets) o;
+			if (answers.getAnswersets().size() == 0) {
+				System.out.println("HAI PERSO");
+				System.exit(0);
+			}
+			for (AnswerSet a : answers.getAnswersets()) {
+				try {
+					System.out.println(answers.getAnswerSetsString());
+					for (Object obj : a.getAtoms()) {
+						if (obj instanceof PosizioneMela) {
+							posizioniRaggiungibili.add((PosizioneMela) obj);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			System.out.println(posizioniRaggiungibili.size());
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 			Pair<Integer, Integer> coordinata = getValidCoordinates();
@@ -371,7 +407,7 @@ public class GameController {
 		Random r = new Random();
 		
 		int scelta = r.nextInt(posizioniRaggiungibili.size());
-		Raggiunge raggiunge = posizioniRaggiungibili.get(scelta);
+		PosizioneMela raggiunge = posizioniRaggiungibili.get(scelta);
 		return new Pair<Integer, Integer>(raggiunge.getRow(), raggiunge.getCol());
 		
 //		Integer row;
