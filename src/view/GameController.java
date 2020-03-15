@@ -365,6 +365,7 @@ public class GameController {
 			encoding.addFilesPath("encodings/posizioneMela");
 			handlerApple.addProgram(encoding);
 			handlerApple.addOption(new OptionDescriptor("--filter=posizioneMela/2 "));
+			//handlerApple.addOption(new OptionDescriptor("-n 0 "));
 			Output o = handlerApple.startSync();
 			AnswerSets answers = (AnswerSets) o;
 			if (answers.getAnswersets().size() == 0) {
@@ -373,7 +374,7 @@ public class GameController {
 			}
 			for (AnswerSet a : answers.getAnswersets()) {
 				try {
-					System.out.println(answers.getAnswerSetsString());
+					//System.out.println(answers.getAnswerSetsString());
 					for (Object obj : a.getAtoms()) {
 						if (obj instanceof PosizioneMela) {
 							posizioniRaggiungibili.add((PosizioneMela) obj);
@@ -405,29 +406,44 @@ public class GameController {
 
 	public Pair<Integer, Integer> getValidCoordinates() {
 		Random r = new Random();
-		
-		int scelta = r.nextInt(posizioniRaggiungibili.size());
-		PosizioneMela raggiunge = posizioniRaggiungibili.get(scelta);
-		return new Pair<Integer, Integer>(raggiunge.getRow(), raggiunge.getCol());
-		
-//		Integer row;
-//		Integer col;
-//		while (true) {
-//			boolean nonVaBene = false;
-//			row = r.nextInt(24);
-//			col = r.nextInt(24);
-//			if (row == snake.getTesta().getRow() && col == snake.getTesta().getCol())
-//				continue;
-//			for (Coda c : snake.getCode()) {
-//				if (row == c.getRow() && col == c.getCol()) {
-//					nonVaBene = true;
-//					break;
-//				}
-//			}
-//			if (nonVaBene == false)
-//				break;
-//		}
-//		// System.out.println("MELA GENERATA "+row+" "+col);
-//		return new Pair<Integer, Integer>(row, col);
+		int best=500;
+		int cont=0;
+		PosizioneMela raggiunge=null;
+		PosizioneMela bestRaggiunge=null;
+		for(int i=0;i<posizioniRaggiungibili.size();i++) {
+			cont=0;
+			raggiunge=posizioniRaggiungibili.get(i);
+			for (Coda c : snake.getCode()) {
+				if(raggiunge.getRow()==c.getRow() && (raggiunge.getCol()==c.getCol()-1 || raggiunge.getCol()==c.getCol()-2))
+					cont++;
+				if(raggiunge.getRow()==c.getRow() && (raggiunge.getCol()==c.getCol()+1 || raggiunge.getCol()==c.getCol()+2))
+					cont++;
+				if(raggiunge.getCol()==c.getCol() && (raggiunge.getRow()==c.getRow()+1 || raggiunge.getRow()==c.getRow()+2))
+					cont++;
+				if(raggiunge.getCol()==c.getCol() && (raggiunge.getRow()==c.getRow()-1 || raggiunge.getRow()==c.getRow()-2))
+					cont++;
+				//soto a destra
+				if(raggiunge.getRow()==c.getRow()+1 && raggiunge.getCol()==c.getCol()+1)
+					cont++;
+				//sopra a sinistra
+				if(raggiunge.getRow()==c.getRow()-1 && raggiunge.getCol()==c.getCol()-1)
+					cont++;
+				//sopra a destra
+				if(raggiunge.getRow()==c.getRow()-1 && raggiunge.getCol()==c.getCol()+1)
+					cont++;
+				//sotto a sinistra
+				if(raggiunge.getRow()==c.getRow()+1 && raggiunge.getCol()==c.getCol()-1)
+					cont++;
+			}
+			if(raggiunge.getCol()==snake.getTesta().getCol() && (raggiunge.getRow()==snake.getTesta().getRow()-1 || raggiunge.getRow()==snake.getTesta().getRow()-2))
+				cont++;
+			if(raggiunge.getRow()==snake.getTesta().getRow() && (raggiunge.getCol()==snake.getTesta().getCol()-1 || raggiunge.getCol()==snake.getTesta().getCol()-2))
+				cont++;
+			if(cont<best) {
+				best=cont;
+				bestRaggiunge=raggiunge;
+			}
+		}
+		return new Pair<Integer, Integer>(bestRaggiunge.getRow(), bestRaggiunge.getCol());
 	}
 }
