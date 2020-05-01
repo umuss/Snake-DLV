@@ -14,18 +14,36 @@ public class Mela {
 	private float posX;
 	private float posY;
 	private int passo;
-	public Mela(int row, int column) {
-		this.row=row;
-		this.col=column;
-		image = new Image("file:assets/mela.png");
-		this.passo=25;
-		this.posX=column*passo;
-		this.posY=row*passo;
+	
+	public static int TIPO_BLU = 0;
+	public static int TIPO_ROSSO = 1;
+	public static int TIPO_DORATO = 2;
+
+
+	public Mela(int row, int column, int tipoMela) {
+		this.row = row;
+		this.col = column;
 		
+		if (tipoMela == TIPO_ROSSO) {
+			image = new Image("file:assets/mela.png");
+		}
+		else if (tipoMela == TIPO_BLU) {
+			image = new Image("file:assets/mela_blu.png");
+		}
+		else if (tipoMela == TIPO_DORATO) {
+			image = new Image("file:assets/mela_dorata.png");
+		}
+		
+		this.passo = 25;
+		this.posX = column * passo;
+		this.posY = row * passo;
+
 	}
+
 	public Mela() {
-		
+
 	}
+
 	public int getPasso() {
 		return passo;
 	}
