@@ -35,18 +35,15 @@ raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y),not coda(23,Y).
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 
 
-obiettivo(X,Y) :- mela(X,Y).
-obiettivo(X,Y) :- melaBlu(X,Y).
-obiettivo(X,Y) :- melaDorata(X,Y).
 % Vincolo: devo per forza raggiungere la mela
-:- obiettivo(X,Y), not inFinalPath(X,Y).
+:- mela(X,Y,_), not inFinalPath(X,Y).
+
+
 
 % Vincolo: voglio fare meno passi possibile
 % :~ inFinalPath(X,Y). [1@2,X,Y]
 % pago il costo della mela (prova)
-:~ inFinalPath(X,Y), melaBlu(X,Y). [3@1,X,Y]
-:~ inFinalPath(X,Y), mela(X,Y). [2@1,X,Y]
-:~ inFinalPath(X,Y), melaDorata(X,Y). [1@1,X,Y]
+:~ inFinalPath(X,Y), mela(X,Y,C). [C@1]
 
 % Vincolo: cellaNera (...)
 

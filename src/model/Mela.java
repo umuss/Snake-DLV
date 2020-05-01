@@ -10,6 +10,10 @@ public class Mela {
 	private int row;
 	@Param(1)
 	private int col;
+	@Param(2)
+	private int costo;
+	
+	
 	private Image image;
 	private float posX;
 	private float posY;
@@ -26,12 +30,15 @@ public class Mela {
 		
 		if (tipoMela == TIPO_ROSSO) {
 			image = new Image("file:assets/mela.png");
+			costo = 2;
 		}
 		else if (tipoMela == TIPO_BLU) {
 			image = new Image("file:assets/mela_blu.png");
+			costo = 3;
 		}
 		else if (tipoMela == TIPO_DORATO) {
 			image = new Image("file:assets/mela_dorata.png");
+			costo = 1;
 		}
 		
 		this.passo = 25;
@@ -44,6 +51,14 @@ public class Mela {
 
 	}
 
+	public int getCosto() {
+		return costo;
+	}
+	
+	public void setCosto(int costo) {
+		this.costo = costo;
+	}
+	
 	public int getPasso() {
 		return passo;
 	}

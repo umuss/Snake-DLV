@@ -190,8 +190,7 @@ public class GameController {
 			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		} else {
 			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
-			
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
 		}
 		// handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
