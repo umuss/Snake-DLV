@@ -4,14 +4,12 @@ import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 import javafx.scene.image.Image;
 
-@Id("melaRossa")
-public class Mela {
+@Id("melaDorata")
+public class MelaDorata {
 	@Param(0)
 	private int row;
 	@Param(1)
 	private int col;
-
-	
 	
 	private Image image;
 	private float posX;
@@ -23,26 +21,23 @@ public class Mela {
 	public static int TIPO_DORATO = 0;
 
 
-	public Mela(int row, int column) {
+	public MelaDorata(int row, int column) {
 		this.row = row;
 		this.col = column;
-		
-		
-		image = new Image("file:assets/mela.png");
+	
+		image = new Image("file:assets/mela_dorata.png");
 
-		
 		this.passo = 25;
 		this.posX = column * passo;
 		this.posY = row * passo;
 
 	}
 
-	public Mela() {
+	public MelaDorata() {
 
 	}
 
-	
-	
+
 	public int getPasso() {
 		return passo;
 	}

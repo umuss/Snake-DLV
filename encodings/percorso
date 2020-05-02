@@ -36,14 +36,19 @@ inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 
 
 % Vincolo: devo per forza raggiungere la mela
-:- mela(X,Y,_), not inFinalPath(X,Y).
-
+:- melaDorata(X,Y), not inFinalPath(X,Y).
+:-melaBlu(X,Y),not melaDorata(X,Y),not inFinalPath(X,Y).
+:-melaRossa(X,Y),not melaDorata(X,Y),not melaBlu(X,Y),not inFinalPath(X,Y).
 
 
 % Vincolo: voglio fare meno passi possibile
-% :~ inFinalPath(X,Y). [1@2,X,Y]
+%:~ melaDorata(X,Y),inFinalPath(X,Y). [1@3,X,Y]
+%:~ melaBlu(X,Y),inFinalPath(X,Y). [1@2,X,Y]
+%:~ melaRossa(X,Y),inFinalPath(X,Y). [1@1,X,Y]
 % pago il costo della mela (prova)
-:~ inFinalPath(X,Y), mela(X,Y,C). [C@1]
+
+%SCOMMENTA QUESTO VINCOLO E VEDI SE A TE SI BLOCCA
+%:~ inFinalPath(X,Y). [1@1,X,Y]
 
 % Vincolo: cellaNera (...)
 

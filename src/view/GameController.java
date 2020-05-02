@@ -23,6 +23,8 @@ import model.Coda;
 import model.Direction;
 import model.InFinalPath;
 import model.Mela;
+import model.MelaBlu;
+import model.MelaDorata;
 import model.PosizioneMela;
 import model.Snake;
 
@@ -37,9 +39,9 @@ public class GameController {
 	Snake snake = new Snake();
 	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
 
-	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
-	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
-	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24));
+	MelaDorata melaDorata = new MelaDorata(new Random().nextInt(24), new Random().nextInt(24));
+	MelaBlu melaBlu = new MelaBlu(new Random().nextInt(24), new Random().nextInt(24));
 
 	boolean hoDisegnato = false;
 	private Handler handlerPath = null;
@@ -83,6 +85,7 @@ public class GameController {
 								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					frame = 0;
+					//System.out.println((mela.getImage()));
 					mainCanvas.getGraphicsContext2D().drawImage(mela.getImage(), mela.getPosX(), mela.getPosY());
 					mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(), melaBlu.getPosY());
 					mainCanvas.getGraphicsContext2D().drawImage(melaDorata.getImage(), melaDorata.getPosX(), melaDorata.getPosY());
@@ -352,7 +355,7 @@ public class GameController {
 	}
 
 	public void verificaCollisioneMela() {
-		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol())) {
+		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol()) ) {
 			InputProgram facts = new ASPInputProgram();
 			posizioniRaggiungibili.clear();
 			try {

@@ -4,8 +4,8 @@ import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 import javafx.scene.image.Image;
 
-@Id("melaRossa")
-public class Mela {
+@Id("melaBlu")
+public class MelaBlu {
 	@Param(0)
 	private int row;
 	@Param(1)
@@ -23,21 +23,19 @@ public class Mela {
 	public static int TIPO_DORATO = 0;
 
 
-	public Mela(int row, int column) {
+	public MelaBlu(int row, int column) {
 		this.row = row;
 		this.col = column;
-		
-		
-		image = new Image("file:assets/mela.png");
+	
+		image = new Image("file:assets/mela_blu.png");
 
-		
 		this.passo = 25;
 		this.posX = column * passo;
 		this.posY = row * passo;
 
 	}
 
-	public Mela() {
+	public MelaBlu() {
 
 	}
 
