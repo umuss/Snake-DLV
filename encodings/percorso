@@ -1,5 +1,7 @@
 % Regole per caselle raggiungibili direttamente 
 
+ 
+
 % Right
 raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1+1.
 % Left
@@ -8,6 +10,8 @@ raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1-1.
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1-1.
 % Down
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1+1.
+
+ 
 
 % Up Toroidal
 raggiunge(X,23) :- testa(X,0), casella(X,23), not coda(X,23).
@@ -18,27 +22,42 @@ raggiunge(23,Y) :- testa(0,Y), casella(23,Y), not coda(23,Y).
 % Right Toroidal
 raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
 
+ 
+
 % Regole per caselle raggiungibili indirettamente 
+
+ 
 
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1,not coda(X,Y).
 
+ 
+
 % Regole per caselle raggiungibili indirettamente toroidalmente
 raggiunge(X,0) :- inFinalPath(X,23), casella(X,0),not coda(X,0).
 raggiunge(X,23) :- inFinalPath(X,0), casella(X,23),not coda(X,23).
 raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y),not coda(0,Y).
 raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y),not coda(23,Y).
-
 % Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
-
-
 % Vincolo: devo per forza raggiungere la mela
-:- melaDorata(X,Y), not inFinalPath(X,Y).
-:-melaBlu(X,Y),not melaDorata(X,Y),not inFinalPath(X,Y).
-:-melaRossa(X,Y),not melaDorata(X,Y),not melaBlu(X,Y),not inFinalPath(X,Y).
+:~ melaDorata(X,Y), not inFinalPath(X,Y).[1@3]
+nonHoMelaDorata:-#count{X,Y:melaDorata(X,Y)}=0.
+:~ nonHoMelaDorata, melaBlu(A,B), not inFinalPath(A,B).[1@2]
+nonHoMelaBlu:-#count{X,Y:melaBlu(X,Y)}=0.
+:~ nonHoMelaDorata,nonHoMelaBlu, melaRossa(A,B), not inFinalPath(A,B).[1@1]
+%:~ inFinalPath(X,Y). [1@1,X,Y]
+
+
+ 
+
+
+%:-melaBlu(X,Y),not melaDorata(X,Y),not inFinalPath(X,Y).
+%:-melaRossa(X,Y),not melaDorata(X,Y),not melaBlu(X,Y),not inFinalPath(X,Y).
+
+ 
 
 
 % Vincolo: voglio fare meno passi possibile
@@ -47,8 +66,6 @@ inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 %:~ melaRossa(X,Y),inFinalPath(X,Y). [1@1,X,Y]
 % pago il costo della mela (prova)
 
-%SCOMMENTA QUESTO VINCOLO E VEDI SE A TE SI BLOCCA
-%:~ inFinalPath(X,Y). [1@1,X,Y]
+ 
 
 % Vincolo: cellaNera (...)
-

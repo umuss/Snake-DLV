@@ -35,6 +35,7 @@ public class GameController {
 	@FXML
 	private Canvas mainCanvas;
 	private double frame = 5;
+	public static boolean presa=false;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
 	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
@@ -202,9 +203,13 @@ public class GameController {
 			for (int i = 0; i < 24; i++)
 				for (int j = 0; j < 24; j++)
 					facts.addObjectInput(new Casella(i, j));
-			facts.addObjectInput(mela);
+			facts.addObjectInput(mela);			
 			facts.addObjectInput(melaBlu);
-			facts.addObjectInput(melaDorata);
+			if(!presa)
+				facts.addObjectInput(melaDorata);
+				
+			
+			
 			facts.addObjectInput(snake.getTesta());
 			for (Coda c : snake.getCode()) {
 				facts.addObjectInput(c);
@@ -219,6 +224,7 @@ public class GameController {
 		handlerPath.addProgram(encoding);
 
 		Output o = handlerPath.startSync();
+		//System.out.println(o.getOutput());
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
@@ -404,6 +410,11 @@ public class GameController {
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		}
+		if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()) ) {
+			presa=true;
+		}
+		
+
 	}
 
 	public void verificaAutoCollisione() {
