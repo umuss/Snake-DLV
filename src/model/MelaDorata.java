@@ -15,15 +15,25 @@ public class MelaDorata {
 	private float posX;
 	private float posY;
 	private int passo;
+	private boolean spawned;
 	
 	public static int TIPO_BLU = 1;
 	public static int TIPO_ROSSO = 2;
 	public static int TIPO_DORATO = 0;
 
 
+	public boolean isSpawned() {
+		return spawned;
+	}
+	
+	public void setSpawned(boolean spawned) {
+		this.spawned = spawned;
+	}
+	
 	public MelaDorata(int row, int column) {
 		this.row = row;
 		this.col = column;
+		this.spawned = true;
 	
 		image = new Image("file:assets/mela_dorata.png");
 
