@@ -17,6 +17,7 @@ public class MelaBlu {
 	private float posX;
 	private float posY;
 	private int passo;
+	private boolean isSpawned;
 	
 	public static int TIPO_BLU = 1;
 	public static int TIPO_ROSSO = 2;
@@ -26,7 +27,7 @@ public class MelaBlu {
 	public MelaBlu(int row, int column) {
 		this.row = row;
 		this.col = column;
-	
+		this.isSpawned=true;
 		image = new Image("file:assets/mela_blu.png");
 
 		this.passo = 25;
@@ -115,6 +116,13 @@ public class MelaBlu {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public void setSpawned(boolean b) {
+		isSpawned=b;
+	}
+	public boolean isSpawned() {
+		return this.isSpawned;
 	}
 
 }

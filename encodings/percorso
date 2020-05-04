@@ -48,23 +48,16 @@ nonHoMelaDorata:-#count{X,Y:melaDorata(X,Y)}=0.
 :~ nonHoMelaDorata, melaBlu(A,B), not inFinalPath(A,B).[1@2]
 nonHoMelaBlu:-#count{X,Y:melaBlu(X,Y)}=0.
 :~ nonHoMelaDorata,nonHoMelaBlu, melaRossa(A,B), not inFinalPath(A,B).[1@1]
-%:~ inFinalPath(X,Y). [1@1,X,Y]
+
+:-#count{X,Y:inFinalPath(X,Y),
 
 
- 
-
-
-%:-melaBlu(X,Y),not melaDorata(X,Y),not inFinalPath(X,Y).
-%:-melaRossa(X,Y),not melaDorata(X,Y),not melaBlu(X,Y),not inFinalPath(X,Y).
-
- 
-
-
-% Vincolo: voglio fare meno passi possibile
-%:~ melaDorata(X,Y),inFinalPath(X,Y). [1@3,X,Y]
-%:~ melaBlu(X,Y),inFinalPath(X,Y). [1@2,X,Y]
-%:~ melaRossa(X,Y),inFinalPath(X,Y). [1@1,X,Y]
-% pago il costo della mela (prova)
+ceMelaDorata :- melaDorata(_,_).
+ceMelaBlu :- melaBlu(_,_).
+ceMelaRossa :- melaRossa(_,_).
+:- melaDorata(X,Y), not inFinalPath(X,Y).
+:- not ceMelaDorata, melaBlu(X,Y), not inFinalPath(X,Y).
+:- not ceMelaDorata, not ceMelaBlu, melaRossa(X,Y), not inFinalPath(X,Y).
 
  
 

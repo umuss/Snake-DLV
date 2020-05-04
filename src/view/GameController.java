@@ -89,8 +89,9 @@ public class GameController {
 					frame = 0;
 					// System.out.println((mela.getImage()));
 					mainCanvas.getGraphicsContext2D().drawImage(mela.getImage(), mela.getPosX(), mela.getPosY());
-					mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(),
-							melaBlu.getPosY());
+					if(melaBlu.isSpawned())
+						mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(),
+								melaBlu.getPosY());
 					if (melaDorata.isSpawned()) {
 						mainCanvas.getGraphicsContext2D().drawImage(melaDorata.getImage(), melaDorata.getPosX(),
 								melaDorata.getPosY());
@@ -209,7 +210,8 @@ public class GameController {
 				for (int j = 0; j < 24; j++)
 					facts.addObjectInput(new Casella(i, j));
 			facts.addObjectInput(mela);
-			facts.addObjectInput(melaBlu);
+			if(melaBlu.isSpawned())
+				facts.addObjectInput(melaBlu);
 			if (melaDorata.isSpawned())
 				facts.addObjectInput(melaDorata);
 
@@ -369,22 +371,20 @@ public class GameController {
 		try {
 			for (int i = 0; i < 24; i++) {
 				for (int j = 0; j < 24; j++) {
-
 					if (i == mela.getRow() && j == mela.getCol())
 						continue;
-					if (i == melaDorata.getRow() && j == melaDorata.getCol())
+					if (i == melaDorata.getRow() && j == melaDorata.getCol() && melaDorata.isSpawned())
 						continue;
 					if (i == melaBlu.getRow() && j == melaBlu.getCol())
 						continue;
-
 					facts.addObjectInput(new Casella(i, j));
 				}
 			}
-			// facts.addObjectInput(mela);
 			facts.addObjectInput(snake.getTesta());
 			for (Coda c : snake.getCode()) {
 				facts.addObjectInput(c);
 			}
+			//System.out.println(snake.getCode().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -400,71 +400,75 @@ public class GameController {
 			System.out.println("HAI PERSO");
 			System.exit(0);
 		}
+		//System.out.println(answers.getAnswersets().size());
 		for (AnswerSet a : answers.getAnswersets()) {
 			try {
-				// System.out.println(answers.getAnswerSetsString());
+				//System.out.println(answers.getAnswerSetsString());
 				for (Object obj : a.getAtoms()) {
 					if (obj instanceof PosizioneMela) {
 						posizioniRaggiungibili.add((PosizioneMela) obj);
+						//System.out.println("CIAO");
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		snake.segnaPunto();
-		labelPunteggio.setText(snake.getPunteggio().toString());
+		//System.out.println(posizioniRaggiungibili.size());
 		// System.out.println(mela.getRow()+" "+mela.getCol());
 		snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 				snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+		handlerApple.removeAll();
 	}
 
 	public void verificaCollisioneMela() {
 
 		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol())) {
-			iterazioniMelaDorata++;
 			calcolaPosizioneMelaDLV();
 			Pair<Integer, Integer> coordinata = getValidCoordinates();
 			mela.setRow(coordinata.getKey());
 			mela.setCol(coordinata.getValue());
-
-			if (iterazioniMelaDorata == 10) {
-				iterazioniMelaDorata = 0;
-				calcolaPosizioneMelaDLV();
-				Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
-				melaDorata.setRow(coordinataDorata.getKey());
-				melaDorata.setCol(coordinataDorata.getValue());
-				melaDorata.setSpawned(true);
-			}
-
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+			verificaSpawnMeleBonus();
 		}
 
 		else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
 				&& melaDorata.isSpawned())) {
-			iterazioniMelaDorata++;
 			melaDorata.setSpawned(false);
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+			verificaSpawnMeleBonus();
 
 		} else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol())) {
-			iterazioniMelaDorata++;
-
-			calcolaPosizioneMelaDLV();
-			Pair<Integer, Integer> coordinata = getValidCoordinates();
-			melaBlu.setRow(coordinata.getKey());
-			melaBlu.setCol(coordinata.getValue());
-
-			if (iterazioniMelaDorata == 10) {
-				iterazioniMelaDorata = 0;
-				calcolaPosizioneMelaDLV();
-				Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
-				melaDorata.setRow(coordinataDorata.getKey());
-				melaDorata.setCol(coordinataDorata.getValue());
-				melaDorata.setSpawned(true);
-
-			}
-
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+			melaBlu.setSpawned(false);
+			verificaSpawnMeleBonus();
 		}
 	}
-
+	public void verificaSpawnMeleBonus() {
+		if (snake.getPunteggio()%10==0) {
+			//System.out.println("SONO ENTRATO");
+			calcolaPosizioneMelaDLV();
+			Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
+			//System.out.println(coordinataDorata.getKey());
+			//System.out.println(coordinataDorata.getValue());
+			melaDorata.setRow(coordinataDorata.getKey());
+			melaDorata.setCol(coordinataDorata.getValue());
+			melaDorata.setSpawned(true);
+		}
+		if (snake.getPunteggio()%5==0) {
+			//System.out.println("SONO ENTRATO");
+			calcolaPosizioneMelaDLV();
+			Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
+			//System.out.println(coordinataDorata.getKey());
+			//System.out.println(coordinataDorata.getValue());
+			melaBlu.setRow(coordinataDorata.getKey());
+			melaBlu.setCol(coordinataDorata.getValue());
+			melaBlu.setSpawned(true);
+		}
+	}
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
@@ -479,7 +483,7 @@ public class GameController {
 		int cont = 0;
 		PosizioneMela raggiunge = null;
 		PosizioneMela bestRaggiunge = null;
-		System.out.println("size posRaggiungibili: " + posizioniRaggiungibili.size());
+		//System.out.println("size posRaggiungibili: " + posizioniRaggiungibili.size());
 		for (int i = 0; i < posizioniRaggiungibili.size(); i++) {
 			cont = 0;
 			raggiunge = posizioniRaggiungibili.get(i);
@@ -520,6 +524,7 @@ public class GameController {
 				bestRaggiunge = raggiunge;
 			}
 		}
+		
 		return new Pair<Integer, Integer>(bestRaggiunge.getRow(), bestRaggiunge.getCol());
 	}
 }
