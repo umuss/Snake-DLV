@@ -23,8 +23,7 @@ import model.Coda;
 import model.Direction;
 import model.InFinalPath;
 import model.Mela;
-import model.MelaBlu;
-import model.MelaDorata;
+
 import model.PosizioneMela;
 import model.Snake;
 
@@ -39,15 +38,13 @@ public class GameController {
 	Snake snake = new Snake();
 	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
 
-	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24));
-	MelaDorata melaDorata = new MelaDorata(new Random().nextInt(24), new Random().nextInt(24));
-	MelaBlu melaBlu = new MelaBlu(new Random().nextInt(24), new Random().nextInt(24));
+	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
 
 	boolean hoDisegnato = false;
 	private Handler handlerPath = null;
 	private Handler handlerApple = null;
-	private int iterazioniMelaDorata = 0;
-	private int iterazioniMelaBlu = 0;
 
 	@FXML
 	private Label labelPunteggio;
@@ -478,7 +475,6 @@ public class GameController {
 	}
 
 	public Pair<Integer, Integer> getValidCoordinates() {
-		Random r = new Random();
 		int best = Integer.MAX_VALUE;
 		int cont = 0;
 		PosizioneMela raggiunge = null;

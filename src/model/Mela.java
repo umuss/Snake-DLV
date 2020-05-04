@@ -4,32 +4,59 @@ import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 import javafx.scene.image.Image;
 
-@Id("melaRossa")
+@Id("mela")
 public class Mela {
 	@Param(0)
 	private int row;
 	@Param(1)
 	private int col;
-	
+	@Param(2)
+	private int type;
 
+	public int getType() {
+		return type;
+	}
 	
+	public void setType(int type) {
+		this.type = type;
+	}
 	
 	private Image image;
 	private float posX;
 	private float posY;
 	private int passo;
 	
-	public static int TIPO_BLU = 1;
-	public static int TIPO_ROSSO = 2;
-	public static int TIPO_DORATO = 0;
+	private boolean spawned;
+	
+	public boolean isSpawned() {
+		return spawned;
+	}
+	
+	public void setSpawned(boolean spawned) {
+		this.spawned = spawned;
+	}
+	
+	public static int TIPO_BLU = 2;
+	public static int TIPO_ROSSO = 3;
+	public static int TIPO_DORATO = 4;
 
 
-	public Mela(int row, int column) {
+	public Mela(int row, int column, int type) {
 		this.row = row;
 		this.col = column;
 		
+		this.type = type;
+		this.spawned = true;
 		
-		image = new Image("file:assets/mela.png");
+		if (type == TIPO_ROSSO) {
+			image = new Image("file:assets/mela.png");			
+		}
+		if (type == TIPO_BLU) {
+			image = new Image("file:assets/mela_blu.png");			
+		}
+		if (type == TIPO_DORATO) {
+			image = new Image("file:assets/mela_dorata.png");			
+		}
 
 		
 		this.passo = 25;

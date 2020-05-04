@@ -1,7 +1,4 @@
 % Regole per caselle raggiungibili direttamente 
-
- 
-
 % Right
 raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1+1.
 % Left
@@ -10,9 +7,6 @@ raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1-1.
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1-1.
 % Down
 raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1+1.
-
- 
-
 % Up Toroidal
 raggiunge(X,23) :- testa(X,0), casella(X,23), not coda(X,23).
 % Down Toroidal
@@ -22,43 +16,37 @@ raggiunge(23,Y) :- testa(0,Y), casella(23,Y), not coda(23,Y).
 % Right Toroidal
 raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
 
- 
-
 % Regole per caselle raggiungibili indirettamente 
-
- 
-
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1,not coda(X,Y).
 raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1,not coda(X,Y).
-
- 
-
 % Regole per caselle raggiungibili indirettamente toroidalmente
 raggiunge(X,0) :- inFinalPath(X,23), casella(X,0),not coda(X,0).
 raggiunge(X,23) :- inFinalPath(X,0), casella(X,23),not coda(X,23).
 raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y),not coda(0,Y).
 raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y),not coda(23,Y).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% GUESS AND CHECK %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
-% Vincolo: devo per forza raggiungere la mela
-:~ melaDorata(X,Y), not inFinalPath(X,Y).[1@3]
-nonHoMelaDorata:-#count{X,Y:melaDorata(X,Y)}=0.
-:~ nonHoMelaDorata, melaBlu(A,B), not inFinalPath(A,B).[1@2]
-nonHoMelaBlu:-#count{X,Y:melaBlu(X,Y)}=0.
-:~ nonHoMelaDorata,nonHoMelaBlu, melaRossa(A,B), not inFinalPath(A,B).[1@1]
 
-:-#count{X,Y:inFinalPath(X,Y),
+% Se c'è la mela dorata, non vorrei non averla nel path.
+:~ mela(X,Y,4), not inFinalPath(X,Y). [1@3]
 
+% Se non c'è la mela dorata, ma c'è la blu, non vorrei non avere quest'ultima nel path.
+nonHoMelaDorata :- #count{X,Y: mela(X,Y,4)} = 0.
+:~ nonHoMelaDorata, mela(A,B,3), not inFinalPath(A,B). [1@2]
 
-ceMelaDorata :- melaDorata(_,_).
-ceMelaBlu :- melaBlu(_,_).
-ceMelaRossa :- melaRossa(_,_).
-:- melaDorata(X,Y), not inFinalPath(X,Y).
-:- not ceMelaDorata, melaBlu(X,Y), not inFinalPath(X,Y).
-:- not ceMelaDorata, not ceMelaBlu, melaRossa(X,Y), not inFinalPath(X,Y).
+% Se non c'è ne la mela dorata ne la blu, non vorrei non avere la rossa nel path.
+nonHoMelaBlu :- #count{X,Y: mela(X,Y,3)} = 0.
+:~ nonHoMelaDorata, nonHoMelaBlu, melaRossa(A,B), not inFinalPath(A,B). [1@1]
 
- 
+% Una tra le tre mele deve essere sempre raggiungibile nell'inFinalPath.
+:- #count{I: mela(X,Y,I), inFinalPath(X,Y)} < 1.
 
 % Vincolo: cellaNera (...)
