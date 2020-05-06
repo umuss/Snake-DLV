@@ -372,7 +372,7 @@ public class GameController {
 						continue;
 					if (i == melaDorata.getRow() && j == melaDorata.getCol() && melaDorata.isSpawned())
 						continue;
-					if (i == melaBlu.getRow() && j == melaBlu.getCol())
+					if (i == melaBlu.getRow() && j == melaBlu.getCol() && melaBlu.isSpawned())
 						continue;
 					facts.addObjectInput(new Casella(i, j));
 				}

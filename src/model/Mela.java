@@ -36,8 +36,8 @@ public class Mela {
 		this.spawned = spawned;
 	}
 	
-	public static int TIPO_BLU = 2;
-	public static int TIPO_ROSSO = 3;
+	public static int TIPO_ROSSO = 2;
+	public static int TIPO_BLU = 3;
 	public static int TIPO_DORATO = 4;
 
 
