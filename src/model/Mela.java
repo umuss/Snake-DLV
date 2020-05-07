@@ -39,7 +39,7 @@ public class Mela {
 	public static int TIPO_ROSSO = 2;
 	public static int TIPO_BLU = 3;
 	public static int TIPO_DORATO = 4;
-
+	
 
 	public Mela(int row, int column, int type) {
 		this.row = row;

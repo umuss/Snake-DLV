@@ -2,6 +2,7 @@ package model;
 
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
+import javafx.scene.image.Image;
 
 @Id("casella")
 public class Casella {
@@ -10,19 +11,46 @@ public class Casella {
 	private int row;
 	@Param(1)
 	private int col;
+	@Param(2)
+	private int type;
+	
 	private float posX;
 	private float posY;
 	private int passo;
 
+	private Image image;
+	
+	public static int TIPO_NORMALE = 0;
+	public static int TIPO_AVVELENATO = 1;
+	
+	public void setType(int type) {
+		this.type = type;
+	}
+	public int getType() {
+		return type;
+	}
 	
 	public Casella() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Casella(int r, int c) {
+	public Image getImage() {
+		return image;
+	}
+	
+	public Casella(int r, int c, int type) {
 		this.row = r;
 		this.col = c;
 		this.passo = 25;
+		
+		if (type == TIPO_NORMALE) {
+			image = null;
+		}
+		else {
+			image = new Image("file:assets/casella_avvelenata.png");
+		}
+		
+		this.type = type;
 		// passo 15: matrice 40x40 con risoluzione 600x600 (600/15 = 40) (troppo
 		// piccolo!!)
 		// passo 25: matrice 32x32, siccome abbiamo risoluzione di 800x800 ed 800/25 =
@@ -86,6 +114,15 @@ public class Casella {
 		}
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Casella c = null;
+		if (obj instanceof Casella) {
+			c = (Casella) obj;
+		}
+		return c.getPosX() == this.posX && c.getPosY() == this.posY;
+	}
+	
 	public void decrementaCol() {
 		if (col == 0) {
 			setCol(31);
