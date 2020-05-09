@@ -52,6 +52,26 @@ public class GameController {
 	private Label labelPunteggio;
 
 	public void drawSnake() {
+
+		int numCaselleAvvelenate = 0;
+		Random scelgoCasella = new Random();
+		int upperBoundCaselle = 5;
+		boolean finito = false;
+		for (int i = 0; i < 24 && !finito; i++) {
+			for (int j = 0; j < 24; j++) {
+				if (numCaselleAvvelenate == upperBoundCaselle) {
+					finito = true;
+					break;
+				}
+				if (scelgoCasella.nextBoolean() && numCaselleAvvelenate < upperBoundCaselle) {
+					continue;
+				} else {
+					numCaselleAvvelenate++;
+					caselleAvvelenate.add(new Casella(i, j, Casella.TIPO_AVVELENATO));
+				}
+			}
+		}
+
 		AnimationTimer tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -217,19 +237,13 @@ public class GameController {
 		InputProgram facts = new ASPInputProgram();
 
 		try {
-			int numCaselleAvvelenate = 0;
-			Random scelgoCasella = new Random();
-			int upperBoundCaselle = 5;
+
 			for (int i = 0; i < 24; i++) {
 				for (int j = 0; j < 24; j++) {
-					if (scelgoCasella.nextBoolean() && numCaselleAvvelenate < upperBoundCaselle) {
-						facts.addObjectInput(new Casella(i, j, Casella.TIPO_NORMALE));
-					} else {
-						numCaselleAvvelenate++;
-						facts.addObjectInput(new Casella(i, j, Casella.TIPO_AVVELENATO));
-						caselleAvvelenate.add(new Casella(i, j, Casella.TIPO_AVVELENATO));
-					}
-
+					Casella c = new Casella(i, j, Casella.TIPO_NORMALE);
+					if (caselleAvvelenate.contains(c))
+						c.setType(Casella.TIPO_AVVELENATO);
+					facts.addObjectInput(c);
 				}
 			}
 			facts.addObjectInput(mela);
@@ -473,8 +487,7 @@ public class GameController {
 			snake.segnaPunto();
 			verificaSpawnMeleBonus();
 			labelPunteggio.setText(snake.getPunteggio().toString());
-		}
-		else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
+		} else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
 				&& melaDorata.isSpawned())) {
 			melaDorata.setSpawned(false);
 			snake.segnaPunto();

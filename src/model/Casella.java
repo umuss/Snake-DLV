@@ -53,6 +53,7 @@ public class Casella {
 		this.row = r;
 		this.col = c;
 		this.passo = 25;
+		this.spawned = true;
 		
 		if (type == TIPO_NORMALE) {
 			image = null;
