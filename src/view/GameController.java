@@ -101,7 +101,8 @@ public class GameController {
 					}
 
 					for (Casella c : caselleAvvelenate) {
-						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
+						if (c.isSpawned())
+							mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
 					}
 
 					verificaCollisioni();
@@ -256,7 +257,7 @@ public class GameController {
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
 		if (answers.getAnswersets().size() == 0) {
-			System.out.println("answer set 0: HAI PERSO");
+			System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
 			System.exit(0);
 		}
 		for (AnswerSet a : answers.getAnswersets()) {
@@ -487,12 +488,12 @@ public class GameController {
 					e.printStackTrace();
 				}
 
-				handlerPath.addProgram(facts);
+				handlerCasellaAvvelenata.addProgram(facts);
 				InputProgram encoding = new ASPInputProgram();
 				encoding.addFilesPath("encodings/posizioneCasellaAvvelenata");
-				handlerPath.addProgram(encoding);
+				handlerCasellaAvvelenata.addProgram(encoding);
 
-				Output o = handlerPath.startSync();
+				Output o = handlerCasellaAvvelenata.startSync();
 				AnswerSets answers = (AnswerSets) o;
 				PosizioneCasella p1 = null;
 				PosizioneCasella p2 = null;
@@ -529,15 +530,14 @@ public class GameController {
 				verificaSpawnMeleBonus();
 			}
 
-			Casella casellaSuTesta = new Casella(snake.getTesta().getRow(), snake.getTesta().getCol(),
-					Casella.TIPO_NORMALE);
-			if (caselleAvvelenate.contains(casellaSuTesta)) {
-				caselleAvvelenate.remove(casellaSuTesta);
-				// TODO pensiamo dopo a diminuire il punteggio
-				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+			for (Casella c : caselleAvvelenate) {
+				if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
+					c.setSpawned(false);
+					snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+							snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+					snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+							snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+				}
 			}
 		}
 	}

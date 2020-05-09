@@ -1,1 +1,1 @@
-casellaValida(X,Y) :- casella(X,Y), not mela(X,Y), not testa(X,Y), not coda(X,Y).
+posizioneCasella(X,Y) :- casella(X,Y), not mela(X,Y), not testa(X,Y), not coda(X,Y).

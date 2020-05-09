@@ -11,6 +11,7 @@ public class PosizioneCasella {
 	@Param(1)
 	private int col;
 
+	
 	public PosizioneCasella() {
 		// TODO Auto-generated constructor stub
 	}

@@ -18,6 +18,17 @@ public class Casella {
 	private float posY;
 	private int passo;
 
+	private boolean spawned;
+	
+	public boolean isSpawned() {
+		return spawned;
+	}
+	
+	public void setSpawned(boolean spawned) {
+		this.spawned = spawned;
+	}
+	
+	
 	private Image image;
 	
 	public static int TIPO_NORMALE = 0;

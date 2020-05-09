@@ -1,34 +1,34 @@
 % Regole per caselle raggiungibili direttamente 
 % Right
-raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1+1.
+raggiunge(X,Y) :- testa(X1,Y), casella(X,Y,_), not coda(X,Y), X = X1+1.
 % Left
-raggiunge(X,Y) :- testa(X1,Y), casella(X,Y), not coda(X,Y), X = X1-1.
+raggiunge(X,Y) :- testa(X1,Y), casella(X,Y,_), not coda(X,Y), X = X1-1.
 % Up
-raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1-1.
+raggiunge(X,Y) :- testa(X,Y1), casella(X,Y,_), not coda(X,Y), Y = Y1-1.
 % Down
-raggiunge(X,Y) :- testa(X,Y1), casella(X,Y), not coda(X,Y), Y = Y1+1.
+raggiunge(X,Y) :- testa(X,Y1), casella(X,Y,_), not coda(X,Y), Y = Y1+1.
 
 % Up Toroidal
-raggiunge(X,23) :- testa(X,0), casella(X,23), not coda(X,23).
+raggiunge(X,23) :- testa(X,0), casella(X,23,_), not coda(X,23).
 % Down Toroidal
-raggiunge(X,0) :- testa(X,23), casella(X,0), not coda(X,0).
+raggiunge(X,0) :- testa(X,23), casella(X,0,_), not coda(X,0).
 % Left Toroidal
-raggiunge(23,Y) :- testa(0,Y), casella(23,Y), not coda(23,Y).
+raggiunge(23,Y) :- testa(0,Y), casella(23,Y,_), not coda(23,Y).
 % Right Toroidal
-raggiunge(0,Y) :- testa(23,Y), casella(0,Y), not coda(0,Y).
+raggiunge(0,Y) :- testa(23,Y), casella(0,Y,_), not coda(0,Y).
 
 % Regole per caselle raggiungibili indirettamente 
 
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1+1,not coda(X,Y).
-raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y), Y = Y1-1,not coda(X,Y).
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1+1,not coda(X,Y).
-raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y), X = X1-1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y,_), Y = Y1+1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X,Y1), casella(X,Y,_), Y = Y1-1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y,_), X = X1+1,not coda(X,Y).
+raggiunge(X,Y) :- inFinalPath(X1,Y), casella(X,Y,_), X = X1-1,not coda(X,Y).
 
 % Regole per caselle raggiungibili indirettamente toroidalmente
-raggiunge(X,0) :- inFinalPath(X,23), casella(X,0),not coda(X,0).
-raggiunge(X,23) :- inFinalPath(X,0), casella(X,23),not coda(X,23).
-raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y),not coda(0,Y).
-raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y),not coda(23,Y).
+raggiunge(X,0) :- inFinalPath(X,23), casella(X,0,_),not coda(X,0).
+raggiunge(X,23) :- inFinalPath(X,0), casella(X,23,_),not coda(X,23).
+raggiunge(0,Y) :- inFinalPath(23,Y), casella(0,Y,_),not coda(0,Y).
+raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y,_),not coda(23,Y).
 
 % Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
