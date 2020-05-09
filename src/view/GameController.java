@@ -452,93 +452,40 @@ public class GameController {
 
 	public void verificaCollisioni() {
 
+		// Verifico se mi trovo su una casella avvelenata, in caso tolgo code
+		for (Casella c : caselleAvvelenate) {
+			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol() && c.isSpawned()) {
+				c.setSpawned(false);
+				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+			}
+		}
+
+		// Verifico se ho preso una delle tre mele
+
 		if ((snake.getTesta().getRow() == mela.getRow() && snake.getTesta().getCol() == mela.getCol())) {
 			calcolaPosizioneMelaDLV();
 			Pair<Integer, Integer> coordinata = getValidCoordinates();
 			mela.setRow(coordinata.getKey());
 			mela.setCol(coordinata.getValue());
 			snake.segnaPunto();
+			verificaSpawnMeleBonus();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+		}
+		else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
+				&& melaDorata.isSpawned())) {
+			melaDorata.setSpawned(false);
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+			verificaSpawnMeleBonus();
 
-			if (snake.getPunteggio() % 10 == 0) {
-				InputProgram facts = new ASPInputProgram();
-
-				try {
-					for (int i = 0; i < 24; i++) {
-						for (int j = 0; j < 24; j++) {
-							Casella c = new Casella(i, j, Casella.TIPO_NORMALE);
-
-							if (caselleAvvelenate.contains(c))
-								c.setType(Casella.TIPO_AVVELENATO);
-
-							facts.addObjectInput(c);
-
-						}
-					}
-					facts.addObjectInput(mela);
-					if (melaBlu.isSpawned())
-						facts.addObjectInput(melaBlu);
-					if (melaDorata.isSpawned())
-						facts.addObjectInput(melaDorata);
-
-					facts.addObjectInput(snake.getTesta());
-					for (Coda c : snake.getCode()) {
-						facts.addObjectInput(c);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				handlerCasellaAvvelenata.addProgram(facts);
-				InputProgram encoding = new ASPInputProgram();
-				encoding.addFilesPath("encodings/posizioneCasellaAvvelenata");
-				handlerCasellaAvvelenata.addProgram(encoding);
-
-				Output o = handlerCasellaAvvelenata.startSync();
-				AnswerSets answers = (AnswerSets) o;
-				PosizioneCasella p1 = null;
-				PosizioneCasella p2 = null;
-
-				for (AnswerSet a : answers.getAnswersets()) {
-					try {
-						for (Object obj : a.getAtoms()) {
-							if (obj instanceof PosizioneCasella) {
-								p1 = (PosizioneCasella) obj;
-								break;
-								// TODO da vedere
-							}
-						}
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-				}
-			}
-
-			else if ((snake.getTesta().getRow() == melaDorata.getRow()
-					&& snake.getTesta().getCol() == melaDorata.getCol() && melaDorata.isSpawned())) {
-				melaDorata.setSpawned(false);
-				snake.segnaPunto();
-				labelPunteggio.setText(snake.getPunteggio().toString());
-				verificaSpawnMeleBonus();
-
-			} else if ((snake.getTesta().getRow() == melaBlu.getRow()
-					&& snake.getTesta().getCol() == melaBlu.getCol())) {
-				snake.segnaPunto();
-				labelPunteggio.setText(snake.getPunteggio().toString());
-				melaBlu.setSpawned(false);
-				verificaSpawnMeleBonus();
-			}
-
-			for (Casella c : caselleAvvelenate) {
-				if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
-					c.setSpawned(false);
-					snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-							snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-					snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-							snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-				}
-			}
+		} else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol())) {
+			snake.segnaPunto();
+			labelPunteggio.setText(snake.getPunteggio().toString());
+			melaBlu.setSpawned(false);
+			verificaSpawnMeleBonus();
 		}
 	}
 
@@ -552,6 +499,44 @@ public class GameController {
 			melaDorata.setRow(coordinataDorata.getKey());
 			melaDorata.setCol(coordinataDorata.getValue());
 			melaDorata.setSpawned(true);
+
+			// e genero le caselle avvelenate anche
+			InputProgram facts = new ASPInputProgram();
+			try {
+				for (int i = 0; i < 24; i++) {
+					for (int j = 0; j < 24; j++) {
+						Casella c = new Casella(i, j, Casella.TIPO_NORMALE);
+
+						if (caselleAvvelenate.contains(c))
+							c.setType(Casella.TIPO_AVVELENATO);
+
+						facts.addObjectInput(c);
+
+					}
+				}
+				facts.addObjectInput(mela);
+				if (melaBlu.isSpawned())
+					facts.addObjectInput(melaBlu);
+				if (melaDorata.isSpawned())
+					facts.addObjectInput(melaDorata);
+
+				facts.addObjectInput(snake.getTesta());
+				for (Coda c : snake.getCode()) {
+					facts.addObjectInput(c);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			handlerCasellaAvvelenata.addProgram(facts);
+			InputProgram encoding = new ASPInputProgram();
+			encoding.addFilesPath("encodings/posizioneCasellaAvvelenata");
+			handlerCasellaAvvelenata.addProgram(encoding);
+
+			Output o = handlerCasellaAvvelenata.startSync();
+			AnswerSets answers = (AnswerSets) o;
+			// Prendo le prime due caselle?
+
 		}
 		if (snake.getPunteggio() % 5 == 0) {
 			// System.out.println("SONO ENTRATO");
