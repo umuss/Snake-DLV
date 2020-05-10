@@ -408,12 +408,6 @@ public class GameController {
 		try {
 			for (int i = 0; i < 24; i++) {
 				for (int j = 0; j < 24; j++) {
-					if (i == mela.getRow() && j == mela.getCol())
-						continue;
-					if (i == melaDorata.getRow() && j == melaDorata.getCol() && melaDorata.isSpawned())
-						continue;
-					if (i == melaBlu.getRow() && j == melaBlu.getCol() && melaBlu.isSpawned())
-						continue;
 
 					Casella c = new Casella(i, j, Casella.TIPO_NORMALE);
 
@@ -421,6 +415,12 @@ public class GameController {
 						c.setType(Casella.TIPO_AVVELENATO);
 
 					facts.addObjectInput(c);
+					if (i == mela.getRow() && j == mela.getCol())
+						continue;
+					if (i == melaDorata.getRow() && j == melaDorata.getCol() && melaDorata.isSpawned())
+						continue;
+					if (i == melaBlu.getRow() && j == melaBlu.getCol() && melaBlu.isSpawned())
+						continue;
 				}
 			}
 			facts.addObjectInput(snake.getTesta());
@@ -459,23 +459,12 @@ public class GameController {
 		}
 		// System.out.println(posizioniRaggiungibili.size());
 		// System.out.println(mela.getRow()+" "+mela.getCol());
-		snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-				snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		handlerApple.removeAll();
 	}
 
 	public void verificaCollisioni() {
 
 		// Verifico se mi trovo su una casella avvelenata, in caso tolgo code
-		for (Casella c : caselleAvvelenate) {
-			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol() && c.isSpawned()) {
-				c.setSpawned(false);
-				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-				snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
-						snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-			}
-		}
 
 		// Verifico se ho preso una delle tre mele
 
@@ -485,6 +474,8 @@ public class GameController {
 			mela.setRow(coordinata.getKey());
 			mela.setCol(coordinata.getValue());
 			snake.segnaPunto();
+			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 			verificaSpawnMeleBonus();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 		} else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
@@ -492,13 +483,29 @@ public class GameController {
 			melaDorata.setSpawned(false);
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
+			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 			verificaSpawnMeleBonus();
 
 		} else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol())) {
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 			melaBlu.setSpawned(false);
+			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 			verificaSpawnMeleBonus();
+		}
+		else{
+			for (Casella c : caselleAvvelenate) {
+				//System.out.println("RIGA NERA:-->"+c.getRow()+"COLONNA NERA--->"+c.getCol());
+				if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol() && c.isSpawned()) {
+					c.setSpawned(false);
+					snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+							snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+					//snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
+							//snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
+				}
+			}
 		}
 	}
 
@@ -514,6 +521,7 @@ public class GameController {
 			melaDorata.setSpawned(true);
 
 			// e genero le caselle avvelenate anche
+			/*
 			InputProgram facts = new ASPInputProgram();
 			try {
 				for (int i = 0; i < 24; i++) {
@@ -549,7 +557,7 @@ public class GameController {
 			Output o = handlerCasellaAvvelenata.startSync();
 			AnswerSets answers = (AnswerSets) o;
 			// Prendo le prime due caselle?
-
+			*/
 		}
 		if (snake.getPunteggio() % 5 == 0) {
 			// System.out.println("SONO ENTRATO");
