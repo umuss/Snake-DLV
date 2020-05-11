@@ -208,14 +208,14 @@ public class GameController {
 		}
 
 		if (System.getProperty("os.name").contains("Linux")) {
-			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
-			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
+			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
 
 		} else {
-			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
-			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2.exe"));
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
+			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
 
 		}
 		// handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
