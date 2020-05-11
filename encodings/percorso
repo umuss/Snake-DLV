@@ -36,33 +36,27 @@ raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y,_),not coda(23,Y).
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 
 % Costi cammini verso mele
-:~ inFinalPath(X,Y), nonHoMelaDorata, nonHoMelaBlu. [1@1,X,Y]
 
-% Se c'Ã¨ la mela dorata, non vorrei non averla nel path.
+% Se c'è la mela dorata, non vorrei non averla nel path.
 :~ mela(X,Y,4), not inFinalPath(X,Y). [1@6]
-:~ inFinalPath(X,Y), not nonHoMelaDorata.[1@5, X,Y]
 
-% Se non c'Ã¨ la mela dorata, ma c'Ã¨ la blu, non vorrei non avere quest'ultima nel path.
+% Se non c'è la mela dorata, ma c'è la blu, non vorrei non avere quest'ultima nel path.
 nonHoMelaDorata :- #count{X,Y: mela(X,Y,4)} = 0.
 :~ nonHoMelaDorata, mela(A,B,3), not inFinalPath(A,B). [1@4]
-:~ inFinalPath(X,Y), not nonHoMelaBlu, nonHoMelaDorata. [1@3, X,Y]
 
-% Se non c'Ã¨ ne la mela dorata ne la blu, non vorrei non avere la rossa nel path.
+% Se non c'è ne la mela dorata ne la blu, non vorrei non avere la rossa nel path.
 nonHoMelaBlu :- #count{X,Y: mela(X,Y,3)} = 0.
 :~ nonHoMelaDorata, nonHoMelaBlu, mela(A,B,2), not inFinalPath(A,B).[1@2]
 
-% 
+% Weak in or
+:~ inFinalPath(X,Y), not nonHoMelaDorata.[1@5, X,Y]
+:~ inFinalPath(X,Y), not nonHoMelaBlu, nonHoMelaDorata. [1@3, X,Y]
 :~ inFinalPath(X,Y), nonHoMelaDorata, nonHoMelaBlu. [1@1, X,Y]
-
 
 % Una tra le tre mele deve essere sempre raggiungibile nell'inFinalPath.
 :- #count{I: mela(X,Y,I), inFinalPath(X,Y)} = 0.
 
-% Vincoli "obiettivo multiplo"
-%:~ N = #count{I: mela(X,Y,I), outFinalPath(X,Y)}, not nonHoMelaDorata. [N@5]
-%:~ N = #count{I: mela(X,Y,I), outFinalPath(X,Y)}, nonHoMelaDorata, not nonHoMelaBlu. [N@3]
-
-
-%:- inFinalPath(X,Y),#count{I: mela(X,Y,I)} < 1.
-
 % Vincolo: cellaNera (...)
+:~ inFinalPath(X,Y), casella(X,Y,1). [1@7]
+
+

@@ -519,7 +519,7 @@ public class GameController {
 							facts.addObjectInput(new Casella(i, j, Casella.TIPO_NORMALE));
 						else {
 							facts.addObjectInput(c);
-							if(!c.isSpawned())
+							if (!c.isSpawned())
 								numCaselleAvvelenateNotSpawned++;
 						}
 
