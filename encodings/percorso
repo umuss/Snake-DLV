@@ -64,4 +64,11 @@ numeroMele(N) :- N = #count{I: mela(X,Y,I), inFinalPath(X,Y)}.
 :~ inFinalPath(X,Y). [1@2, X,Y]
 
 % Vincoli obiettivo multiplo
-:~ N = #count{I: mela(X,Y,I), outFinalPath(X,Y)}, numeroMele(M), M > 1. [N@1]
+
+% QUESTI DUE NON VANNO
+% meleInCampo(A) :- A = #count{I: mela(X,Y,I)}.
+% :~ meleInCampo(A), A > 1, N = #count{I: mela(X,Y,I), outFinalPath(X,Y)}. [N@1]
+% QUI OK
+:~ N = #count{I: mela(X,Y,I), outFinalPath(X,Y)}. [N@1]
+
+
