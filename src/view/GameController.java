@@ -33,6 +33,12 @@ import model.Snake;
 
 public class GameController {
 
+	// TODO 1. Aggiustare fxml menu 
+	// TODO 2. Aggiustare fxml highscore
+	// TODO 3. Alert se hai fatto highscore
+	// TODO 4. Non permettere inserimento di nome vuoto
+
+	
 	@FXML
 	private Canvas mainCanvas;
 	private double frame = 5;
@@ -302,7 +308,7 @@ public class GameController {
 
 			// System.exit(0);
 		}
-		System.out.println(answers.getAnswerSetsString());
+
 		for (AnswerSet a : answers.getAnswersets()) {
 			// posizioniRaggiungibili.clear();
 			if (trovatoCasella)

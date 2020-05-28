@@ -3,6 +3,8 @@ package view;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,9 +25,9 @@ public class GameControllerHuman {
 	private double frame = 5;
 	boolean giaDisegnata = false;
 	Snake snake = new Snake();
-	Mela melaRossa = new Mela(new Random().nextInt(24), new Random().nextInt(24),Mela.TIPO_ROSSO);
-	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24),Mela.TIPO_BLU);
-	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24),Mela.TIPO_DORATO);
+	Mela melaRossa = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
 	boolean hoDisegnato = false;
 
 	@FXML
@@ -68,11 +70,14 @@ public class GameControllerHuman {
 								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					frame = 0;
-					mainCanvas.getGraphicsContext2D().drawImage(melaRossa.getImage(), melaRossa.getPosX(), melaRossa.getPosY());
-					if(melaBlu.isSpawned())
-						mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(), melaBlu.getPosY());
-					if(melaDorata.isSpawned())
-						mainCanvas.getGraphicsContext2D().drawImage(melaDorata.getImage(), melaDorata.getPosX(), melaDorata.getPosY());
+					mainCanvas.getGraphicsContext2D().drawImage(melaRossa.getImage(), melaRossa.getPosX(),
+							melaRossa.getPosY());
+					if (melaBlu.isSpawned())
+						mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(),
+								melaBlu.getPosY());
+					if (melaDorata.isSpawned())
+						mainCanvas.getGraphicsContext2D().drawImage(melaDorata.getImage(), melaDorata.getPosX(),
+								melaDorata.getPosY());
 					for (Coda c : snake.getCode()) {
 						mainCanvas.getGraphicsContext2D().drawImage(c.getImage(), c.getPosX(), c.getPosY(), 25, 25);
 					}
@@ -227,8 +232,8 @@ public class GameControllerHuman {
 			melaRossa.setRow(new Random().nextInt(24));
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
-		}
-		else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol() && melaBlu.isSpawned())) {
+		} else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol()
+				&& melaBlu.isSpawned())) {
 			System.out.println("prendo melaBlu");
 			snake.segnaPunto();
 			snake.segnaPunto();
@@ -238,21 +243,34 @@ public class GameControllerHuman {
 			snake.getCode().add(new Coda(snake.getCode().get(snake.getCode().size() - 1).getRow() - 1,
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 			melaBlu.setSpawned(false);
-		}
-		else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol() && melaDorata.isSpawned())) {
+		} else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
+				&& melaDorata.isSpawned())) {
 			System.out.println("prendo melaDorata");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 			melaDorata.setCol(new Random().nextInt(24));
 			melaDorata.setRow(new Random().nextInt(24));
-			snake.getCode().remove(snake.getCode().size()-1);
+			snake.getCode().remove(snake.getCode().size() - 1);
 			melaDorata.setSpawned(false);
 		}
-		if(snake.getPunteggio()%10==0) {
+		if (snake.getPunteggio() % 10 == 0) {
 			melaDorata.setSpawned(true);
 		}
-		if(snake.getPunteggio()%5==0) {
+		if (snake.getPunteggio() % 5 == 0) {
 			melaBlu.setSpawned(true);
+		}
+	}
+
+	public void registraPunteggio(Integer punteggioOttenuto) {
+
+		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
+
+		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
+
+		GestoreScene.getHighScoreController().setScore(new HighscoreEntry(result, String.valueOf(punteggioOttenuto)));
+
+		if (GestoreScene.scoreboard.isEmpty()) {
+			// ...
 		}
 	}
 
@@ -260,8 +278,7 @@ public class GameControllerHuman {
 		for (Coda c : snake.getCode()) {
 
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
-				System.out.println("AUTOCOLLISIONE");
-				System.exit(0);
+				registraPunteggio(snake.getPunteggio());
 			}
 		}
 	}
