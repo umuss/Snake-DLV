@@ -1,7 +1,8 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
@@ -21,6 +22,7 @@ import javafx.util.Pair;
 import model.Casella;
 import model.Coda;
 import model.Direction;
+import model.GestoreScene;
 import model.InFinalPath;
 import model.Mela;
 import model.PosizioneCasella;
@@ -39,6 +41,7 @@ public class GameController {
 	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
 	ArrayList<Casella> caselleAvvelenate = new ArrayList<>();
 
+
 	Mela mela = new Mela(5, 3, Mela.TIPO_ROSSO);
 	Mela melaDorata = new Mela(6, 5, Mela.TIPO_DORATO);
 	Mela melaBlu = new Mela(7, 5, Mela.TIPO_BLU);
@@ -47,9 +50,39 @@ public class GameController {
 	private Handler handlerPath = null;
 	private Handler handlerApple = null;
 	private Handler handlerCasellaAvvelenata = null;
+	private AnimationTimer tm = null;
 
 	@FXML
 	private Label labelPunteggio;
+
+	public void registraPunteggio(Integer punteggioOttenuto) {
+
+		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
+		// stageHighScore.setResizable(false); va in loop per qualche assurdo motivo
+		//stageHighScore.show();
+
+//			TextInputDialog dialog = new TextInputDialog("Inserisci il tuo nome");
+//			dialog.setTitle("Inserisci il nome");
+//			dialog.setHeaderText("punteggio");
+//			dialog.setContentText("ecc ecc ecc");
+//
+//			// Traditional way to get the response value.
+//			Optional<String> result = Platform.runLater(dialog::showAndWait);
+//			if (result.isPresent()) {
+//				System.out.println("Your name: " + result.get());
+//			}
+		
+		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
+		
+		GestoreScene.getHighScoreController().setScore(new HighscoreEntry(result, String.valueOf(punteggioOttenuto)));
+
+		
+		
+		
+		if (GestoreScene.scoreboard.isEmpty()) {
+			// ...
+		}
+	}
 
 	public void drawSnake() {
 		caselleAvvelenate.add(new Casella(0, 6, Casella.TIPO_AVVELENATO));
@@ -57,7 +90,10 @@ public class GameController {
 		caselleAvvelenate.add(new Casella(10, 20, Casella.TIPO_AVVELENATO));
 		caselleAvvelenate.add(new Casella(13, 1, Casella.TIPO_AVVELENATO));
 		caselleAvvelenate.add(new Casella(22, 18, Casella.TIPO_AVVELENATO));
-		AnimationTimer tm = new AnimationTimer() {
+		
+		
+		
+		tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				if (frame >= 5) {
@@ -116,6 +152,8 @@ public class GameController {
 				frame += 1;
 			}
 		};
+		
+		
 		tm.start();
 
 //		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -213,9 +251,9 @@ public class GameController {
 			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
 
 		} else {
-			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
-			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5.exe"));
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
+			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
 
 		}
 		// handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
@@ -257,8 +295,14 @@ public class GameController {
 		InFinalPath nextMove = new InFinalPath();
 		if (answers.getAnswersets().size() == 0) {
 			System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
-			System.exit(0);
+			tm.stop();
+			registraPunteggio(snake.getPunteggio());
+
+			return;
+
+			// System.exit(0);
 		}
+		System.out.println(answers.getAnswerSetsString());
 		for (AnswerSet a : answers.getAnswersets()) {
 			// posizioniRaggiungibili.clear();
 			if (trovatoCasella)
@@ -426,7 +470,10 @@ public class GameController {
 		AnswerSets answers = (AnswerSets) o;
 		if (answers.getAnswersets().size() == 0) {
 			System.out.println("HAI PERSO");
-			System.exit(0);
+			registraPunteggio(snake.getPunteggio());
+			tm.stop();
+			return;
+			// System.exit(0);
 		}
 		// System.out.println(answers.getAnswersets().size());
 		for (AnswerSet a : answers.getAnswersets()) {
@@ -658,4 +705,6 @@ public class GameController {
 
 		return new Pair<Integer, Integer>(bestRaggiunge.getRow(), bestRaggiunge.getCol());
 	}
+
+
 }
