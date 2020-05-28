@@ -91,7 +91,7 @@ public class GameController {
 //			// Traditional way to get the response value.
 //			Optional<String> result = Platform.runLater(dialog::showAndWait);
 //			if (result.isPresent()) {
-//				System.out.println("Your name: " + result.get());
+//				//System.out.println("Your name: " + result.get());
 //			}
 
 		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
@@ -146,7 +146,7 @@ public class GameController {
 								snake.getTesta().getPosX(), snake.getTesta().getPosY(), 25, 25);
 					}
 					frame = 0;
-					// System.out.println((mela.getImage()));
+					// //System.out.println((mela.getImage()));
 					mainCanvas.getGraphicsContext2D().drawImage(mela.getImage(), mela.getPosX(), mela.getPosY());
 					if (melaBlu.isSpawned())
 						mainCanvas.getGraphicsContext2D().drawImage(melaBlu.getImage(), melaBlu.getPosX(),
@@ -180,23 +180,23 @@ public class GameController {
 //
 //				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP
 //						&& compreso()) {
-//					// System.out.println("DOWN");
+//					// //System.out.println("DOWN");
 //					snake.getTesta().setDirection(Direction.DOWN);
 //					hoDisegnato = false;
 //				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
 //						&& snake.getTesta().getDirection() != Direction.LEFT && compreso()) {
 //					snake.getTesta().setDirection(Direction.RIGHT);
-//					// System.out.println("right");
+//					// //System.out.println("right");
 //					hoDisegnato = false;
 //				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
 //						&& snake.getTesta().getDirection() != Direction.RIGHT && compreso()) {
 //					snake.getTesta().setDirection(Direction.LEFT);
-//					// System.out.println("left");
+//					// //System.out.println("left");
 //					hoDisegnato = false;
 //				} else if (event.getCode() == KeyCode.UP && hoDisegnato
 //						&& snake.getTesta().getDirection() != Direction.DOWN && compreso()) {
 //					snake.getTesta().setDirection(Direction.UP);
-//					// System.out.println("up");
+//					// //System.out.println("up");
 //					hoDisegnato = false;
 //				}
 //
@@ -307,12 +307,12 @@ public class GameController {
 		handlerPath.addProgram(encoding);
 
 		Output o = handlerPath.startSync();
-		// System.out.println(o.getOutput());
+		// //System.out.println(o.getOutput());
 		AnswerSets answers = (AnswerSets) o;
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
 		if (answers.getAnswersets().size() == 0) {
-			System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
+			//System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
 			tm.stop();
 			registraPunteggio(snake.getPunteggio());
 			snake = new Snake();
@@ -335,7 +335,7 @@ public class GameController {
 						if (isValid((InFinalPath) obj)) {
 							nextMove = (InFinalPath) obj;
 							trovatoCasella = true;
-							// System.out.println("Prendo come finalPath " + nextMove.getRow() + "," +
+							// //System.out.println("Prendo come finalPath " + nextMove.getRow() + "," +
 							// nextMove.getCol());
 							break;
 						}
@@ -368,7 +368,7 @@ public class GameController {
 //					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
 //					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 //				}
-//				// System.out.println("STO SFORANDO");
+//				// //System.out.println("STO SFORANDO");
 //				// Caso non di sforamento
 //			} else {
 //				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -478,7 +478,7 @@ public class GameController {
 			for (Coda c : snake.getCode()) {
 				facts.addObjectInput(c);
 			}
-			// System.out.println(snake.getCode().size());
+			// //System.out.println(snake.getCode().size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -491,7 +491,7 @@ public class GameController {
 		Output o = handlerApple.startSync();
 		AnswerSets answers = (AnswerSets) o;
 		if (answers.getAnswersets().size() == 0) {
-			System.out.println("HAI PERSO");
+			//System.out.println("HAI PERSO");
 			registraPunteggio(snake.getPunteggio());
 			tm.stop();
 			snake = new Snake();
@@ -502,22 +502,22 @@ public class GameController {
 			return;
 			// System.exit(0);
 		}
-		// System.out.println(answers.getAnswersets().size());
+		// //System.out.println(answers.getAnswersets().size());
 		for (AnswerSet a : answers.getAnswersets()) {
 			try {
-				// System.out.println(answers.getAnswerSetsString());
+				// //System.out.println(answers.getAnswerSetsString());
 				for (Object obj : a.getAtoms()) {
 					if (obj instanceof PosizioneMela) {
 						posizioniRaggiungibili.add((PosizioneMela) obj);
-						// System.out.println("CIAO");
+						// //System.out.println("CIAO");
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		// System.out.println(posizioniRaggiungibili.size());
-		// System.out.println(mela.getRow()+" "+mela.getCol());
+		// //System.out.println(posizioniRaggiungibili.size());
+		// //System.out.println(mela.getRow()+" "+mela.getCol());
 		handlerApple.removeAll();
 	}
 
@@ -554,7 +554,7 @@ public class GameController {
 			verificaSpawnMeleBonus();
 		} else {
 			for (Casella c : caselleAvvelenate) {
-				// System.out.println("RIGA NERA:-->"+c.getRow()+"COLONNA NERA--->"+c.getCol());
+				// //System.out.println("RIGA NERA:-->"+c.getRow()+"COLONNA NERA--->"+c.getCol());
 				if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()
 						&& c.isSpawned()) {
 					c.setSpawned(false);
@@ -571,14 +571,14 @@ public class GameController {
 	public void verificaSpawnMeleBonus() {
 		if (snake.getPunteggio() % 10 == 0) {
 			int numCaselleAvvelenateNotSpawned = 0;
-			// System.out.println("SONO ENTRATO");
+			// //System.out.println("SONO ENTRATO");
 			calcolaPosizioneMelaDLV();
 			Casella casellaAvvelenataNuova = new Casella(0, 0, Casella.TIPO_AVVELENATO);
 			casellaAvvelenataNuova.setSpawned(false);
 			caselleAvvelenate.add(casellaAvvelenataNuova);
 			Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
-			// System.out.println(coordinataDorata.getKey());
-			// System.out.println(coordinataDorata.getValue());
+			// //System.out.println(coordinataDorata.getKey());
+			// //System.out.println(coordinataDorata.getValue());
 			melaDorata.setRow(coordinataDorata.getKey());
 			melaDorata.setCol(coordinataDorata.getValue());
 			melaDorata.setSpawned(true);
@@ -597,11 +597,11 @@ public class GameController {
 								numCaselleAvvelenateNotSpawned++;
 						}
 
-						// System.out.println("AGGIUNGO");
+						// //System.out.println("AGGIUNGO");
 
 					}
 				}
-				System.out.println(numCaselleAvvelenateNotSpawned);
+				//System.out.println(numCaselleAvvelenateNotSpawned);
 				facts.addObjectInput(mela);
 				if (melaBlu.isSpawned())
 					facts.addObjectInput(melaBlu);
@@ -654,11 +654,11 @@ public class GameController {
 
 		}
 		if (snake.getPunteggio() % 5 == 0) {
-			// System.out.println("SONO ENTRATO");
+			// //System.out.println("SONO ENTRATO");
 			calcolaPosizioneMelaDLV();
 			Pair<Integer, Integer> coordinataDorata = getValidCoordinates();
-			// System.out.println(coordinataDorata.getKey());
-			// System.out.println(coordinataDorata.getValue());
+			// //System.out.println(coordinataDorata.getKey());
+			// //System.out.println(coordinataDorata.getValue());
 			melaBlu.setRow(coordinataDorata.getKey());
 			melaBlu.setCol(coordinataDorata.getValue());
 			melaBlu.setSpawned(true);
@@ -677,7 +677,7 @@ public class GameController {
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
-				// System.out.println("AUTOCOLLISIONE");
+				// //System.out.println("AUTOCOLLISIONE");
 			}
 		}
 	}
@@ -687,7 +687,7 @@ public class GameController {
 		int cont = 0;
 		PosizioneMela raggiunge = null;
 		PosizioneMela bestRaggiunge = null;
-		// System.out.println("size posRaggiungibili: " +
+		// //System.out.println("size posRaggiungibili: " +
 		// posizioniRaggiungibili.size());
 		for (int i = 0; i < posizioniRaggiungibili.size(); i++) {
 			cont = 0;
