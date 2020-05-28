@@ -24,7 +24,7 @@
                   <Insets bottom="15.0" top="15.0" />
                </VBox.margin>
             </ImageView>
-            <Label text="Classifica" textFill="#487dcf">
+            <Label fx:id="theLabel" text="Classifica" textFill="#487dcf">
                <font>
                   <Font name="Gabriola" size="41.0" />
                </font></Label>

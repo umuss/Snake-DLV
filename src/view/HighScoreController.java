@@ -1,5 +1,8 @@
 package view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +11,12 @@ import javax.swing.JOptionPane;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import model.GestoreScene;
 
 public class HighScoreController {
@@ -18,6 +24,9 @@ public class HighScoreController {
 	@FXML
 	private TableView tableClassifica;
 
+    @FXML
+    private Label theLabel;
+	
 	public void setScore(HighscoreEntry entry) {
 		ObservableList<HighscoreEntry> list = tableClassifica.getItems();
 		boolean maxScore = true;
@@ -42,6 +51,12 @@ public class HighScoreController {
 	}
 
 	public void initView() {
+		try {
+			theLabel.setFont(Font.loadFont(new FileInputStream(new File("assets/font.ttf")), 41));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		TableColumn<String, HighscoreEntry> column1 = new TableColumn<>("Nome");
 		column1.setCellValueFactory(new PropertyValueFactory<>("name"));
 

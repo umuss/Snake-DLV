@@ -1,6 +1,7 @@
 package view;
 
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -10,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -18,6 +20,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.GestoreScene;
 
@@ -36,6 +39,9 @@ public class Main extends Application {
 			FXMLLoader loaderMenu = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
 			BorderPane menuRoot = (BorderPane) loaderMenu.load();
 			Scene sceneMenu = new Scene(menuRoot, 400, 430);
+			VBox scenevBox = (VBox) menuRoot.getTop();
+			Label sceneLabel = (Label) scenevBox.getChildren().get(1);
+			sceneLabel.setFont(Font.loadFont(new FileInputStream(new File("assets/font.ttf")), 41));
 			GestoreScene.setScenaMenu(sceneMenu);
 
 			// Scena gioco

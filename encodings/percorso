@@ -54,7 +54,6 @@ nonHoMelaBlu :- #count{X,Y: mela(X,Y,3)} = 0.
 numeroMele(N) :- N = #count{I: mela(X,Y,I), inFinalPath(X,Y)}.
 :- numeroMele(N), N = 0.
 
-
 %%%%%%%% Weak constraints %%%%%%%%%%%%%%%%%
 % Vincolo su cella nera
 :~ #count{X,Y: inFinalPath(X,Y), casella(X,Y,1)} > 0. [1@4]
@@ -69,7 +68,6 @@ numeroMele(N) :- N = #count{I: mela(X,Y,I), inFinalPath(X,Y)}.
 % Se ci sono piu' Answer Set in cui pago 0@3, allora scendo di livello 
 % e scelgo quello in cui ci sono meno inFinalPath(X,Y) possibili.
 :~ inFinalPath(X,Y). [1@2, X,Y]
-
 
 %%%%%%%% Vincoli "obiettivo multiplo" %%%%%
 meleFuoriDalPath(N) :- #count{I: mela(X,Y,I), outFinalPath(X,Y)} = N.
