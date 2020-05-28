@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -10,13 +11,39 @@
 
 <BorderPane prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.HighScoreController">
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Gioca" />
-            <Button mnemonicParsing="false" text="Gioca umano" />
-            <Button mnemonicParsing="false" text="Vedi punteggi" />
-            <Button mnemonicParsing="false" text="Esci" />
+            <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="150.0" text="Fai giocare l'IA" />
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Gioca tu" />
+            <Button mnemonicParsing="false" prefWidth="150.0" text="Vedi punteggi" />
+            <Button mnemonicParsing="false" prefWidth="100.0" text="Esci" />
          </children>
       </VBox>
    </center>
+   <top>
+      <VBox alignment="CENTER">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../assets/menu.png" />
+               </image>
+            </ImageView>
+            <Label text="Snake-DLV" textFill="#11bc6f">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Gabriola" size="41.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <bottom>
+      <Label text="(c) Luca Laboccetta, Giorgio Andronico" textFill="#157910" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Ebrima" size="13.0" />
+         </font>
+      </Label>
+   </bottom>
 </BorderPane>

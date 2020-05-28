@@ -29,12 +29,26 @@ public class GameControllerHuman {
 	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
 	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
 	boolean hoDisegnato = false;
+	AnimationTimer tm = null;
 
 	@FXML
 	private Label labelPunteggio;
 
+	@FXML
+	public void interrompiGiocoHuman() {
+		tm.stop();
+		snake = new Snake();
+		melaRossa = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+		melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+		melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+		labelPunteggio.setText("0");
+		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaMenu());
+
+	}
+	
+	
 	public void drawSnake() {
-		AnimationTimer tm = new AnimationTimer() {
+		tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				if (frame >= 10) {
@@ -267,6 +281,10 @@ public class GameControllerHuman {
 
 		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
 
+		if (result.equals("")) {
+			result = "Anonimo";
+		}
+		
 		GestoreScene.getHighScoreController().setScore(new HighscoreEntry(result, String.valueOf(punteggioOttenuto)));
 
 		if (GestoreScene.scoreboard.isEmpty()) {
@@ -276,9 +294,15 @@ public class GameControllerHuman {
 
 	public void verificaAutoCollisione() {
 		for (Coda c : snake.getCode()) {
-
 			if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()) {
+				tm.stop();
 				registraPunteggio(snake.getPunteggio());
+				snake = new Snake();
+				melaRossa = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+				melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+				melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+				labelPunteggio.setText("0");
+				return;
 			}
 		}
 	}

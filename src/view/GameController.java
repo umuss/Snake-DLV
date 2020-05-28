@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -33,11 +34,12 @@ import model.Snake;
 
 public class GameController {
 
-	// TODO 1. Aggiustare fxml menu 
+	// TODO 1. Aggiustare fxml menu
 	// TODO 2. Aggiustare fxml highscore
-	// TODO 3. Alert se hai fatto highscore
-	// TODO 4. Non permettere inserimento di nome vuoto
+	// TODO 3. Aggiungere rimanenti handler
 
+	
+	
 	
 	@FXML
 	private Canvas mainCanvas;
@@ -47,10 +49,9 @@ public class GameController {
 	ArrayList<PosizioneMela> posizioniRaggiungibili = new ArrayList<>();
 	ArrayList<Casella> caselleAvvelenate = new ArrayList<>();
 
-
-	Mela mela = new Mela(5, 3, Mela.TIPO_ROSSO);
-	Mela melaDorata = new Mela(6, 5, Mela.TIPO_DORATO);
-	Mela melaBlu = new Mela(7, 5, Mela.TIPO_BLU);
+	Mela mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+	Mela melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+	Mela melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
 
 	boolean hoDisegnato = false;
 	private Handler handlerPath = null;
@@ -61,11 +62,23 @@ public class GameController {
 	@FXML
 	private Label labelPunteggio;
 
+	@FXML
+	public void interrompiGioco() {
+		tm.stop();
+		snake = new Snake();
+		mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+		melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+		melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+		labelPunteggio.setText("0");
+		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaMenu());
+
+	}
+	
 	public void registraPunteggio(Integer punteggioOttenuto) {
 
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
 		// stageHighScore.setResizable(false); va in loop per qualche assurdo motivo
-		//stageHighScore.show();
+		// stageHighScore.show();
 
 //			TextInputDialog dialog = new TextInputDialog("Inserisci il tuo nome");
 //			dialog.setTitle("Inserisci il nome");
@@ -77,17 +90,16 @@ public class GameController {
 //			if (result.isPresent()) {
 //				System.out.println("Your name: " + result.get());
 //			}
-		
+
 		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
-		
+
+		if (result.equals("")) {
+			result = "Anonimo";
+		}
+
 		GestoreScene.getHighScoreController().setScore(new HighscoreEntry(result, String.valueOf(punteggioOttenuto)));
 
-		
-		
-		
-		if (GestoreScene.scoreboard.isEmpty()) {
-			// ...
-		}
+
 	}
 
 	public void drawSnake() {
@@ -96,9 +108,7 @@ public class GameController {
 		caselleAvvelenate.add(new Casella(10, 20, Casella.TIPO_AVVELENATO));
 		caselleAvvelenate.add(new Casella(13, 1, Casella.TIPO_AVVELENATO));
 		caselleAvvelenate.add(new Casella(22, 18, Casella.TIPO_AVVELENATO));
-		
-		
-		
+
 		tm = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -158,8 +168,7 @@ public class GameController {
 				frame += 1;
 			}
 		};
-		
-		
+
 		tm.start();
 
 //		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -303,7 +312,11 @@ public class GameController {
 			System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
 			tm.stop();
 			registraPunteggio(snake.getPunteggio());
-
+			snake = new Snake();
+			mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+			melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+			melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+			labelPunteggio.setText("0");
 			return;
 
 			// System.exit(0);
@@ -478,6 +491,11 @@ public class GameController {
 			System.out.println("HAI PERSO");
 			registraPunteggio(snake.getPunteggio());
 			tm.stop();
+			snake = new Snake();
+			mela = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_ROSSO);
+			melaBlu = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_BLU);
+			melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
+			labelPunteggio.setText("0");
 			return;
 			// System.exit(0);
 		}
@@ -711,6 +729,5 @@ public class GameController {
 
 		return new Pair<Integer, Integer>(bestRaggiunge.getRow(), bestRaggiunge.getCol());
 	}
-
 
 }

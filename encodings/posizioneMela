@@ -33,5 +33,5 @@ raggiunge(23,Y) :- inFinalPath(0,Y), casella(23,Y,_),not coda(23,Y).
 % Guess
 inFinalPath(X,Y) | outFinalPath(X,Y) :- raggiunge(X,Y).
 posizioneMela(X,Y) :- inFinalPath(X,Y), not casella(X,Y,1), not mela(X,Y,1), not mela(X,Y,2), not mela(X,Y,3).
-:-raggiunge(X,Y),not inFinalPath(X,Y).
-:-outFinalPath(X,Y).
+:- raggiunge(X,Y), not inFinalPath(X,Y).
+:- outFinalPath(X,Y).

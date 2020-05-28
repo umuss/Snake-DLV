@@ -3,6 +3,9 @@ package view;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -16,6 +19,19 @@ public class HighScoreController {
 	private TableView tableClassifica;
 
 	public void setScore(HighscoreEntry entry) {
+		ObservableList<HighscoreEntry> list = tableClassifica.getItems();
+		boolean maxScore = true;
+		for (HighscoreEntry hse : list) {
+			if (Integer.valueOf(hse.getScore()) > Integer.valueOf(entry.getScore())) {
+				maxScore = false;
+				break;
+			}
+		}
+		
+		if (maxScore) 
+			JOptionPane.showMessageDialog(null, "Congratulazioni! Hai totalizzato il punteggio più alto fin'ora.");
+		
+
 		tableClassifica.getItems().add(entry);
 
 	}
@@ -31,6 +47,9 @@ public class HighScoreController {
 
 		TableColumn<String, HighscoreEntry> column2 = new TableColumn<>("Punteggio");
 		column2.setCellValueFactory(new PropertyValueFactory<>("score"));
+		
+		column1.prefWidthProperty().bind(tableClassifica.widthProperty().multiply(0.5));
+        column2.prefWidthProperty().bind(tableClassifica.widthProperty().multiply(0.5));
 
 		tableClassifica.getColumns().add(column1);
 		tableClassifica.getColumns().add(column2);

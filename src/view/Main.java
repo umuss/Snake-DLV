@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +35,7 @@ public class Main extends Application {
 
 			FXMLLoader loaderMenu = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
 			BorderPane menuRoot = (BorderPane) loaderMenu.load();
-			Scene sceneMenu = new Scene(menuRoot, 600, 640);
+			Scene sceneMenu = new Scene(menuRoot, 400, 430);
 			GestoreScene.setScenaMenu(sceneMenu);
 
 			// Scena gioco
@@ -65,7 +66,7 @@ public class Main extends Application {
 			// Scena scoreboard
 			FXMLLoader scoreLoader = new FXMLLoader();
 			scoreLoader.setLocation(getClass().getResource("HighScoreView.fxml"));
-			GestoreScene.setScenaScoreboard(new Scene((BorderPane) scoreLoader.load(), 400, 400));
+			GestoreScene.setScenaScoreboard(new Scene((BorderPane) scoreLoader.load(), 400, 690));
 			GestoreScene.setHighScoreController(scoreLoader.getController());
 			GestoreScene.getHighScoreController().initView();
 
@@ -91,6 +92,24 @@ public class Main extends Application {
 				}
 			});
 
+			Button showScoreboardButton = (Button) menuButtons.getChildren().get(2);
+			showScoreboardButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					primaryStage.setScene(GestoreScene.getScenaScoreboard());
+				}
+			});
+			
+			Button exitButton = (Button) menuButtons.getChildren().get(3);
+			exitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					Platform.exit();
+				}
+			});
+			
 			primaryStage.setScene(sceneMenu);
 			primaryStage.show();
 
