@@ -106,24 +106,24 @@ public class GameControllerHuman {
 
 				if (event.getCode() == KeyCode.DOWN && hoDisegnato && snake.getTesta().getDirection() != Direction.UP
 						&& compreso()) {
-					System.out.println("down");
-					// System.out.println("DOWN");
+					//System.out.println("down");
+					// //System.out.println("DOWN");
 					snake.getTesta().setDirection(Direction.DOWN);
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.RIGHT && hoDisegnato
 						&& snake.getTesta().getDirection() != Direction.LEFT && compreso()) {
 					snake.getTesta().setDirection(Direction.RIGHT);
-					// System.out.println("right");
+					// //System.out.println("right");
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.LEFT && hoDisegnato
 						&& snake.getTesta().getDirection() != Direction.RIGHT && compreso()) {
 					snake.getTesta().setDirection(Direction.LEFT);
-					// System.out.println("left");
+					// //System.out.println("left");
 					hoDisegnato = false;
 				} else if (event.getCode() == KeyCode.UP && hoDisegnato
 						&& snake.getTesta().getDirection() != Direction.DOWN && compreso()) {
 					snake.getTesta().setDirection(Direction.UP);
-					// System.out.println("up");
+					// //System.out.println("up");
 					hoDisegnato = false;
 				}
 
@@ -151,7 +151,7 @@ public class GameControllerHuman {
 					snake.getCode().get(i).setCol(posizioniVecchie.get(i).getKey());
 					snake.getCode().get(i).setRow(posizioniVecchie.get(i).getValue());
 				}
-				// System.out.println("STO SFORANDO");
+				// //System.out.println("STO SFORANDO");
 				// Caso non di sforamento
 			} else {
 				posizioniVecchie.add(new Pair<Integer, Integer>(snake.getTesta().getCol(), snake.getTesta().getRow()));
@@ -239,7 +239,7 @@ public class GameControllerHuman {
 
 	public void verificaCollisionemelaRossa() {
 		if ((snake.getTesta().getRow() == melaRossa.getRow() && snake.getTesta().getCol() == melaRossa.getCol())) {
-			System.out.println("prendo melaRossa");
+			//System.out.println("prendo melaRossa");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 			melaRossa.setCol(new Random().nextInt(24));
@@ -248,7 +248,7 @@ public class GameControllerHuman {
 					snake.getCode().get(snake.getCode().size() - 1).getCol() - 1));
 		} else if ((snake.getTesta().getRow() == melaBlu.getRow() && snake.getTesta().getCol() == melaBlu.getCol()
 				&& melaBlu.isSpawned())) {
-			System.out.println("prendo melaBlu");
+			//System.out.println("prendo melaBlu");
 			snake.segnaPunto();
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
@@ -259,7 +259,7 @@ public class GameControllerHuman {
 			melaBlu.setSpawned(false);
 		} else if ((snake.getTesta().getRow() == melaDorata.getRow() && snake.getTesta().getCol() == melaDorata.getCol()
 				&& melaDorata.isSpawned())) {
-			System.out.println("prendo melaDorata");
+			//System.out.println("prendo melaDorata");
 			snake.segnaPunto();
 			labelPunteggio.setText(snake.getPunteggio().toString());
 			melaDorata.setCol(new Random().nextInt(24));
