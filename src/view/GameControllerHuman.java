@@ -43,6 +43,8 @@ public class GameControllerHuman {
 		melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
 		labelPunteggio.setText("0");
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaMenu());
+		GestoreScene.getPrimaryStage().sizeToScene();
+
 
 	}
 	
@@ -278,6 +280,8 @@ public class GameControllerHuman {
 	public void registraPunteggio(Integer punteggioOttenuto) {
 
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
+		GestoreScene.getPrimaryStage().sizeToScene();
+
 
 		String result = JOptionPane.showInputDialog(null, "Inserisci il tuo nome");
 

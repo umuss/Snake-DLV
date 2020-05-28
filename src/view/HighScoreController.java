@@ -38,7 +38,7 @@ public class HighScoreController {
 		}
 		
 		if (maxScore) 
-			JOptionPane.showMessageDialog(null, "Congratulazioni! Hai totalizzato il punteggio più alto fin'ora.");
+			JOptionPane.showMessageDialog(null, "Congratulazioni! Hai totalizzato il punteggio piï¿½ alto fin'ora.");
 		
 
 		tableClassifica.getItems().add(entry);
@@ -48,6 +48,8 @@ public class HighScoreController {
 	@FXML
 	void tornaAlMenu(ActionEvent event) {
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaMenu());
+		GestoreScene.getPrimaryStage().sizeToScene();
+
 	}
 
 	public void initView() {

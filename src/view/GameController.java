@@ -71,12 +71,15 @@ public class GameController {
 		melaDorata = new Mela(new Random().nextInt(24), new Random().nextInt(24), Mela.TIPO_DORATO);
 		labelPunteggio.setText("0");
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaMenu());
+		GestoreScene.getPrimaryStage().sizeToScene();
 
 	}
 	
 	public void registraPunteggio(Integer punteggioOttenuto) {
 
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
+		GestoreScene.getPrimaryStage().sizeToScene();
+
 		// stageHighScore.setResizable(false); va in loop per qualche assurdo motivo
 		// stageHighScore.show();
 

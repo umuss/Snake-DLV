@@ -31,7 +31,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			primaryStage.setResizable(false);
+			//primaryStage.setResizable(false);
 			GestoreScene.setPrimaryStage(primaryStage);
 
 			// Scena menu
@@ -83,6 +83,7 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent event) {
 					primaryStage.setScene(sceneGame);
+					primaryStage.sizeToScene();
 					gameController.drawSnake();
 
 				}
@@ -94,6 +95,7 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent event) {
 					primaryStage.setScene(sceneGameHuman);
+					primaryStage.sizeToScene();
 					gameControllerHuman.drawSnake();
 				}
 			});
@@ -104,6 +106,7 @@ public class Main extends Application {
 				@Override
 				public void handle(ActionEvent event) {
 					primaryStage.setScene(GestoreScene.getScenaScoreboard());
+					primaryStage.sizeToScene();
 				}
 			});
 			
@@ -116,7 +119,8 @@ public class Main extends Application {
 				}
 			});
 			
-			primaryStage.setScene(sceneMenu);
+			primaryStage.setScene(sceneMenu);			
+			primaryStage.sizeToScene();
 			primaryStage.show();
 
 		} catch (Exception e) {
