@@ -19,7 +19,7 @@
             </Label>
             <Label fx:id="labelPunteggio" prefHeight="28.0" prefWidth="365.0" style="-fx-text-fill: green;" text="0">
                <padding>
-                  <Insets right="350.0" top="3.0" />
+                  <Insets right="300.0" top="3.0" />
                </padding>
             </Label>
             <Button mnemonicParsing="false" onAction="#interrompiGiocoHuman" text="Interrompi" />
