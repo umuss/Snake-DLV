@@ -38,9 +38,6 @@ public class GameController {
 	// TODO 2. Aggiustare fxml highscore
 	// TODO 3. Aggiungere rimanenti handler
 
-	
-	
-	
 	@FXML
 	private Canvas mainCanvas;
 	private double frame = 5;
@@ -74,7 +71,7 @@ public class GameController {
 		GestoreScene.getPrimaryStage().sizeToScene();
 
 	}
-	
+
 	public void registraPunteggio(Integer punteggioOttenuto) {
 
 		GestoreScene.getPrimaryStage().setScene(GestoreScene.getScenaScoreboard());
@@ -101,7 +98,6 @@ public class GameController {
 		}
 
 		GestoreScene.getHighScoreController().setScore(new HighscoreEntry(result, String.valueOf(punteggioOttenuto)));
-
 
 	}
 
@@ -171,7 +167,27 @@ public class GameController {
 				frame += 1;
 			}
 		};
+		try {
+			// questa andrebbe fatta una sola volta all'inizio, credo
+			ASPMapper.getInstance().registerClass(InFinalPath.class);
+			ASPMapper.getInstance().registerClass(PosizioneMela.class);
+			ASPMapper.getInstance().registerClass(PosizioneCasella.class);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (System.getProperty("os.name").contains("Linux")) {
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
+			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
+
+		} else {
+			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
+			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
+			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
+
+		}
 		tm.start();
 
 //		GestoreScene.getScenaCorrente().setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -254,26 +270,8 @@ public class GameController {
 	public void verificaProssimaCella(Direction dir) {
 
 		ArrayList<Pair<Integer, Integer>> posizioniVecchie = new ArrayList<>();
-		try {
-			ASPMapper.getInstance().registerClass(InFinalPath.class);
-			ASPMapper.getInstance().registerClass(PosizioneMela.class);
-			ASPMapper.getInstance().registerClass(PosizioneCasella.class);
+		handlerPath.removeAll();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		if (System.getProperty("os.name").contains("Linux")) {
-			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
-			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_5"));
-
-		} else {
-			handlerPath = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
-			handlerApple = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
-			handlerCasellaAvvelenata = new DesktopHandler(new DLV2DesktopService("lib/dlv2_old.exe"));
-
-		}
 		// handler.addOption(new OptionDescriptor("--filter=inFinalPath/2 "));
 		InputProgram facts = new ASPInputProgram();
 
@@ -312,7 +310,7 @@ public class GameController {
 		boolean trovatoCasella = false;
 		InFinalPath nextMove = new InFinalPath();
 		if (answers.getAnswersets().size() == 0) {
-			//System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
+			// System.out.println("answer set 0: HAI PERSO (calcolaProssimaCella)");
 			tm.stop();
 			registraPunteggio(snake.getPunteggio());
 			snake = new Snake();
@@ -454,6 +452,7 @@ public class GameController {
 	}
 
 	public void calcolaPosizioneMelaDLV() {
+		handlerApple.removeAll();
 		InputProgram facts = new ASPInputProgram();
 		posizioniRaggiungibili.clear();
 		try {
@@ -491,7 +490,7 @@ public class GameController {
 		Output o = handlerApple.startSync();
 		AnswerSets answers = (AnswerSets) o;
 		if (answers.getAnswersets().size() == 0) {
-			//System.out.println("HAI PERSO");
+			// System.out.println("HAI PERSO");
 			registraPunteggio(snake.getPunteggio());
 			tm.stop();
 			snake = new Snake();
@@ -554,7 +553,8 @@ public class GameController {
 			verificaSpawnMeleBonus();
 		} else {
 			for (Casella c : caselleAvvelenate) {
-				// //System.out.println("RIGA NERA:-->"+c.getRow()+"COLONNA NERA--->"+c.getCol());
+				// //System.out.println("RIGA NERA:-->"+c.getRow()+"COLONNA
+				// NERA--->"+c.getCol());
 				if (c.getRow() == snake.getTesta().getRow() && c.getCol() == snake.getTesta().getCol()
 						&& c.isSpawned()) {
 					c.setSpawned(false);
@@ -584,6 +584,7 @@ public class GameController {
 			melaDorata.setSpawned(true);
 
 			// e genero le caselle avvelenate anche
+			handlerCasellaAvvelenata.removeAll();
 			InputProgram facts = new ASPInputProgram();
 			try {
 				for (int i = 0; i < 24; i++) {
@@ -601,7 +602,7 @@ public class GameController {
 
 					}
 				}
-				//System.out.println(numCaselleAvvelenateNotSpawned);
+				// System.out.println(numCaselleAvvelenateNotSpawned);
 				facts.addObjectInput(mela);
 				if (melaBlu.isSpawned())
 					facts.addObjectInput(melaBlu);
